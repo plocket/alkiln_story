@@ -3,36 +3,54 @@
 <head>
   <title>AL Story Test Generator</title>
   <style type="text/css">
-    #output {
+
+    * {
+      width: 100%;
+      box-sizing: border-box;
+      margin: .2em 0;
+    }
+
+    body { padding: .3em 1em; }
+
+    p { margin: 0; }
+
+    button {
+      width: 8em;
+      height: 2.5em;
+    }
+
+    #feature, #scenario {
       border: 1px solid black;
-      padding: .3em;
+      padding: 0.5em;
+      margin-bottom: 1em;
     }
 
-    #opening, #table {
-      font-family: monospace;
-    }
+    #feature, #scenario { font-family: monospace; }
 
-    p {
-      margin: 0;
-    }
+    #data_container { margin: 1em 0; }
+    #data {}
   </style>
 </head>
 <body>
   <h2>AL Story Test Generator</h2>
+  <p>Chrome browser is the only browser where this has been tried</p>
 
-  <textarea id="input" name="" id="" cols="" rows=""></textarea>
-
-  <div id="output">
-    <div id="opening">
-      <p id="tags"></p>
-      <p>Feature: Description of broad purpose for all scenarios in here</p>
-      <p></p>
-      <p>Scenario: Description of specific example</p>
-      <p>&nbsp;&nbsp;Given I start the interview at "my_yml_file_name"</p>
-      <p>&nbsp;&nbsp;And I get to the question id "some question id" with this data:</p>
-      <p>&nbsp;&nbsp;&nbsp;&nbsp;| var | choice | value |</p>
-    </div>
-    <div id="table">&nbsp;&nbsp;&nbsp;&nbsp;When it's ready, your test will go here</div>
+  <div id="data_container">
+    <p>Paste your docassemble variable code into this text box:</p>
+    <textarea id="data" placeholder="Paste data here"></textarea>
+    <!-- <p>Keys to ignore:</p>  -->
+    <!-- <textarea id="ignore_keys" name="" cols="" rows=""></textarea>  -->
   </div>
+  
+
+  <div>If you're starting with a blank <code>.feature</code> file, paste this into your file:</div>
+  <button id="copy_feature">Copy</button>
+  <div id="feature">Feature: Description of broad purpose for all scenarios in here</div>
+
+  <div>Once the test has been generated, tap 'copy' and paste it into your <code>.feature</code> file</div>
+  <button id="copy_scenario">Copy</button>
+  <div id="scenario"></div>
+
+  <script type="text/javascript" src="generate.js"></script>
 </body>
 </html>
