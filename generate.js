@@ -82,6 +82,9 @@ let add_story_row = function(name, choice, value, story) {
 
   // Ignore text we should ignore wherever it appears, even in a fully formed variable name
   if (ignore_anywhere.includes( name )) { return; }
+  for ( let to_ignore of ignore_anywhere ) {
+    if ( name.includes( to_ignore ) ) { return; }
+  }
 
   if (typeof value === 'string') {
     value = JSON.stringify(value);
@@ -147,6 +150,7 @@ let parse_elements = function(var_name, elements, story) {
         }
       } else if ( typeof choice_value === 'object' ) {
         if (keys_to_ignore.includes( var_name )) { continue; }
+        if (ignore_anywhere.includes( var_name )) { continue; }
         parse_dict({
           name_start: var_name,
           choice: '',
@@ -168,6 +172,7 @@ let parse_elements = function(var_name, elements, story) {
 let parse_dict = function({name_start, choice, dict, story}, debug) {
   for ( let key in dict ) {
     if (keys_to_ignore.includes( key )) { continue; }
+    // if (ignore_anywhere.includes( key )) { continue; }
 
     let var_name = key;
     if (name_start !== '') {
