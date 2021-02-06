@@ -39,6 +39,7 @@ let keys_to_ignore = [
   'longitude',
   'norm',
   'geolocate_success',
+  'complete_attribute',
 ];
 
 // Ignore text we should ignore wherever it appears, even in a fully formed variable name
@@ -47,6 +48,19 @@ let ignore_anywhere = [
   'interview_metadata',
   'macourts',
   'court_emails',
+  '.location',
+  'github_repo_name',
+  'allow_cron',
+  'allowed_courts',
+  '.uses_parts',
+  `.court_code`,
+  `.department`,
+  // `.description`,
+  `.division`,
+  `.fax`,
+  `.has_po_box`,
+  // `.name`,
+  // `.phone`,
 ];
 
 
@@ -137,24 +151,23 @@ let parse_elements = function(var_name, elements, story) {
   } else {
     let were_checkboxes = false;
     let true_found = false;
-    for ( let choice in elements ) {
-      let choice_value = elements[ choice ];
-      let type = typeof choice_value;
+    for ( let element in elements ) {
+      let element_value = elements[ element ];
+      let type = typeof element_value;
       if (type === 'string' || type === 'number' || type === 'boolean') {
-        add_story_row( var_name, choice , choice_value, story );
+        add_story_row( var_name, element , element_value, story );
         if ( type === 'boolean' ) {
           were_checkboxes = true;
         }
-        if (choice_value === true) {
+        if (element_value === true) {
           true_found = true;
         }
-      } else if ( typeof choice_value === 'object' ) {
+      } else if ( typeof element_value === 'object' ) {
         if (keys_to_ignore.includes( var_name )) { continue; }
-        if (ignore_anywhere.includes( var_name )) { continue; }
         parse_dict({
           name_start: var_name,
           choice: '',
-          dict: choice_value,
+          dict: element_value,
           story: story,
         });
       } else {
@@ -172,7 +185,14 @@ let parse_elements = function(var_name, elements, story) {
 let parse_dict = function({name_start, choice, dict, story}, debug) {
   for ( let key in dict ) {
     if (keys_to_ignore.includes( key )) { continue; }
-    // if (ignore_anywhere.includes( key )) { continue; }
+
+    // Add element all on its own. Might not be valid, but it also might?
+    // I'm not sure which of these is the way to do it
+    let instanceName = dict.instanceName;
+    if ( instanceName ) {
+      add_story_row( name_start, '', instanceName, story );
+      console.log( `${name_start}, , ${instanceName}`);
+    }
 
     let var_name = key;
     if (name_start !== '') {
