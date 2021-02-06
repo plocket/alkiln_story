@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AL Story Test Generator</title>
+  <style type="text/css">
+    #output {
+      border: 1px solid black;
+      padding: .3em;
+    }
+
+    #opening, #table {
+      font-family: monospace;
+    }
+
+    p {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <h2>AL Story Test Generator</h2>
+
+  <textarea id="input" name="" id="" cols="" rows=""></textarea>
+
+  <div id="output">
+    <div id="opening">
+      <p id="tags"></p>
+      <p>Feature: Description of broad purpose for all scenarios in here</p>
+      <p></p>
+      <p>Scenario: Description of specific example</p>
+      <p>&nbsp;&nbsp;Given I start the interview at "my_yml_file_name"</p>
+      <p>&nbsp;&nbsp;And I get to the question id "some question id" with this data:</p>
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;| var | choice | value |</p>
+    </div>
+    <div id="table">&nbsp;&nbsp;&nbsp;&nbsp;When it's ready, your test will go here</div>
+  </div>
+</body>
+</html>
