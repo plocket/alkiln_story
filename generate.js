@@ -355,24 +355,8 @@ document.body.addEventListener( 'input', function( event ) {
     let num_new_lines = (area.value.split( '\n' )).length;
     area.rows = num_new_lines;
   }
-
   if ( event.target.id === 'ignore_anywhere' ) {
-    if ( ignore_node.value ) {
-      try {
-        ignore_anywhere = JSON.parse( ignore_node.value );
-        ignore_warning.classList.remove('error');
-        ignore_error.innerText = '';
-        update_output();
-      } catch (err) {
-        console.warn(err);
-        ignore_warning.classList.add('error');
-        ignore_error.innerText = err;
-        ignore_anywhere = ignore_anywhere_default_alphabetical;  // use default
-      }
-    } else if ( ignore_node.value === '' ) {
-      ignore_anywhere = [];
-    }
-    update_output();
+    handle_ignore_error();
   }
 });  // ends listen for input
 
@@ -382,6 +366,25 @@ let ignore_anywhere_default_alphabetical = ignore_anywhere_default.sort(function
     if (b > a) { return -1; }
     return 0;
 });
+
+let handle_ignore_error = function () {
+  if ( ignore_node.value ) {
+    try {
+      ignore_anywhere = JSON.parse( ignore_node.value );
+      ignore_warning.classList.remove('error');
+      ignore_error.innerText = '';
+    } catch (err) {
+      console.warn(err);
+      ignore_warning.classList.add('error');
+      ignore_error.innerText = err;
+      ignore_anywhere = ignore_anywhere_default_alphabetical;  // use default
+    }
+  } else if ( ignore_node.value === '' ) {
+    ignore_anywhere = [];
+  }
+  update_output();
+}
+
 let reset_ignore_elem = function () {
   // Ignore text we should ignore wherever it appears, even in a fully formed variable name
   let ignore_node_initial_text = JSON.stringify( ignore_anywhere_default_alphabetical, null, 2 );
@@ -389,6 +392,7 @@ let reset_ignore_elem = function () {
   ignore_node.rows = num_new_lines;
   ignore_node.value = ignore_node_initial_text;
   ignore_anywhere = ignore_anywhere_default_alphabetical;
+  handle_ignore_error();
   update_output();
 };
 reset_ignore_elem();

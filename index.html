@@ -151,6 +151,8 @@
       width: fit-content;
     }
 
+    #ignore_anywhere_container { position: relative; }
+
   </style>
 </head>
 <body>
@@ -172,7 +174,6 @@
   </section>
 
   <section id="ignore_lists_container">
-    <p id="ignore_warning" class="ok message">Something is wrong with the list. Using default values. See error below.</p>
     <!-- and/or try <a href='https://javascriptvalidator.net/'>a js validator</a>.</p> -->
 
     <button class="toggler" for="options_container">▼ Edit test options</button>
@@ -204,6 +205,7 @@
       <!-- <div id="ignore_keys"></div> -->
       
       <div id="ignore_anywhere_container" display="none">
+        <p id="ignore_warning" class="ok message">Something is wrong with the list. Will use default values. See bottom.</p>
         <p>Add or edit words to ignore in the keys of variables:</p>
         <button id="reset_ignore">ⓧ Reset</button> 
         <textarea id="ignore_anywhere" name="" cols="" rows=""></textarea> 
