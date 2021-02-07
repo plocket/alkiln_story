@@ -10,46 +10,185 @@
       margin: .2em 0;
     }
 
-    body { padding: .3em 1em; }
+    body {
+      padding: .3em 1em;
+      font-family: Helvetica;
+      text-align: center;
+    }
 
-    p { margin: 0; }
+    p {
+      margin: 0 0 0.3em 0;
+    }
 
     button {
-      width: 8em;
+      width: 15em;
       height: 2.5em;
     }
 
+    header {
+      background-color: #57c372;
+      max-width: 600px;
+      margin: 0 auto;
+      border-radius: 5px;
+      margin-bottom: 1em;
+
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Border outlines interfere with icon */
+    header:before {
+      background-color: #57c372;
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      /* border: 2px solid #000000; */
+      border-radius: 5px;
+    }
+
+    header:after {
+      background-color: #57c372;
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: .5em;
+      left: .5em;
+      right: .5em;
+      bottom: .5em;
+      /* border: 2px solid #000000; */
+      border-radius: 5px;
+    }
+
+
+    header, header * {
+      width: unset;
+      position: relative;
+    }
+
+    header h2 {
+      padding: 1em;
+    }
+
+    header .icon {
+      height: 6em;
+      position: absolute;
+      top: -2em;
+      right: -5em;
+    }
+
+    section {
+      position: relative;
+      background-color: #daeedf;
+      border: 1px solid gray;
+      border-radius: 5px;
+      margin: 0 auto;
+      margin-bottom: 1em;
+      padding: .5em 1em;
+      max-width: 600px;
+      text-align: left;
+    }
+
+    #resources {
+      background-color: unset;
+      border: unset;
+      padding: 0;
+    }
+
     #feature, #scenario {
-      border: 1px solid black;
+      background-color: white;
+      font-family: monospace;
+      border: 1px solid gray;
+      border-radius: 5px;
       padding: 0.5em;
       margin-bottom: 1em;
     }
 
-    #feature, #scenario { font-family: monospace; }
+    #auto_ignored_keys_only {
+      font-family: monospace;
+    }
 
-    #data_container { margin: 1em 0; }
-    #data {}
+    .togglee {
+      overflow: hidden;
+      height: 0;
+    }
+
+    .expanded {
+      height: fit-content;
+      transition: height 70ms ease-out;
+    }
+
+    .message {
+      position: absolute;
+      top: -1em;
+      left: 0;
+    }
+
+    .error_output {
+      color: red;
+    }
+
+    .ok {
+      display: none;
+    }
+
+    .error {
+      display: block;
+      color: red;
+    }
   </style>
 </head>
 <body>
-  <h2>AL Story Test Generator</h2>
-  <p>Chrome browser is the only browser where this has been tried</p>
+  <header>
+    <h2><span>AL Story Test Generator<img class="icon" src="noun_dough_3639378.svg"></span></h2>
+  </header>
 
-  <div id="data_container">
+  <section id="resources">
+    <p>Error? <a href="https://jsonlint.com/?code=">Use JSON validator</a></p>  
+  </section>
+
+  <section id="data_container">
+    <p id="da_data_warning" class="ok message">Something is wrong with the data. See error below.</p>
+      <!-- and/or try <a href='https://javascriptvalidator.net/'>a js validator</a>.</p> -->
     <p>Paste your docassemble variable code into this text box:</p>
-    <textarea id="data" placeholder="Paste data here"></textarea>
-    <!-- <p>Keys to ignore:</p>  -->
-    <!-- <textarea id="ignore_keys" name="" cols="" rows=""></textarea>  -->
-  </div>
+    <textarea id="da_data" placeholder="Paste data here" rows="4"></textarea>
+    <div class="error_output"></div>
+  </section>
+
+  <section id="ignore_lists_container">
+    <p id="ignore_warning" class="ok message">Something is wrong with the list. Using default values. See error below.</p>
+     <!-- and/or try <a href='https://javascriptvalidator.net/'>a js validator</a>.</p> -->
+    <button class="toggler" for="ignore_container">▼ Edit ignored variables</button>
+    <div id="ignore_container" class="togglee collapsed">
+      <p>Automatically ignored:</p>
+      <p id="auto_ignored_keys_only"></p>
+      <br>
+
+      <!-- Why offer them this fine-grained detail till we know it's needed? -->
+      <!-- <div id="ignore_keys"></div> -->
+      
+      <div id="ignore_anywhere_container" display="none">
+        <p>Add or edit words to ignore in the keys of variables:</p>
+        <button id="reset_ignore">ⓧ Reset</button> 
+        <textarea id="ignore_anywhere" name="" cols="" rows=""></textarea> 
+      </div>
+    <div class="error_output"></div>
+    </div>
+  </section>
   
 
-  <div>If you're starting with a blank <code>.feature</code> file, paste this into your file:</div>
-  <button id="copy_feature">Copy</button>
-  <div id="feature">Feature: Description of broad purpose for all scenarios in here</div>
+  <section id="output_container">
+    <p>If you're starting with a blank <code>.feature</code> file, paste this into your file:</p>
+    <button id="copy_feature">Copy</button>
+    <div id="feature">Feature: Description of broad purpose for all scenarios in here</div>
 
-  <div>Once the test has been generated, tap 'copy' and paste it into your <code>.feature</code> file</div>
-  <button id="copy_scenario">Copy</button>
-  <div id="scenario"></div>
+    <div>Once the test has been generated, tap 'copy' and paste it into your <code>.feature</code> file</div>
+    <button id="copy_scenario">Copy</button>
+    <div id="scenario"></div>
+  </section>
 
   <script type="text/javascript" src="generate.js"></script>
 </body>
