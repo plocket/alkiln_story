@@ -243,14 +243,21 @@ let get_story = function( vars, story ) {
 // ============================
 let scenario = document.getElementById( 'scenario' );
 let output = '';
+let num_signature_rows = 0;
+let yaml_file_name = 'YAML_file_name_without_extension';
 
-let test_start = `\nScenario: Quick description of specific example`;
-test_start += `\n\u00A0\u00A0Given I start the interview at "interview_YAML_file_name"`
-test_start += `\n\u00A0\u00A0And the user gets to "some question id" with this data:`
-test_start += `\n\u00A0\u00A0\u00A0\u00A0| var | choice | value |`;
+let get_test_start = function () {
+  let test_start = ''
+  test_start += `\nScenario: Quick description of specific example`;
+  test_start += `\n\u00A0\u00A0Given I start the interview at "${ yaml_file_name }"`
+  test_start += `\n\u00A0\u00A0And the user gets to "some question id" with this data:`
+  test_start += `\n\u00A0\u00A0\u00A0\u00A0| var | choice | value |`;
+  return test_start;
+}
+get_test_start();
 
-scenario.innerText = test_start;
-output = `\n\n${ test_start }`;
+scenario.innerText = get_test_start();
+output = `\n\n${ get_test_start() }`;
 
 
 
@@ -274,7 +281,7 @@ let update_output = function () {
       console.warn( data );
       da_warning.classList.add('error');
       data_error.innerText = err;
-      output = `\n\n${ test_start }`;
+      output = `\n\n${ get_test_start() }`;
     }
     return;
   }
@@ -285,10 +292,11 @@ let update_output = function () {
   let test_length = `slow`;
   if ( story.length <= 20 ) { test_length = `fast`; }
   output = `\n\n@generated @${ test_length }`;
-  output += test_start;
+  get_test_start();
+  output += get_test_start();
 
   for ( let row of story ) {
-    output += `\n\u00A0\u00A0\u00A0\u00A0${row}`;
+    output += `\n\u00A0\u00A0\u00A0\u00A0${ row }`;
   }
 
   // Add signature rows
@@ -380,18 +388,27 @@ document.body.addEventListener( 'click', ( event ) => {
   }
 });  // End listen for click
 
-let num_signature_rows = 0;
 document.body.addEventListener( 'input', function ( event ) {
   let target = event.target;
   if ( target.id === 'num_signatures' ) {
+
     if ( target.value && target.value !== '' ) {
       num_signature_rows = parseInt( target.value );
-
     } else {
       num_signature_rows = 0;
     }
-    update_output();
+
+  } else if ( target.id === 'yaml_file_name' ) {
+
+    if ( target.value && target.value !== '' ) {
+      yaml_file_name = target.value.replace( /\.yml$/, '' );
+    } else {
+      yaml_file_name = 'interview_YAML_file_name_without_extension';
+    }
+    
   }
+
+  update_output();
 })
 
 
