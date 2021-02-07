@@ -30,8 +30,6 @@
       max-width: 600px;
       margin: 0 auto;
       border-radius: 5px;
-      margin-bottom: 1em;
-
       position: relative;
       z-index: 1;
     }
@@ -90,6 +88,14 @@
       padding: .5em 1em;
       max-width: 600px;
       text-align: left;
+    }
+
+    .icon.small {
+      width: 1.2em;
+      display: inline;
+      position: relative;
+      top: .5em;
+      margin: 0;
     }
 
     #resources {
@@ -153,8 +159,8 @@
   </header>
 
   <section id="resources">
-    <p><a href="https://docs.google.com/document/d/1hkNr78mrU3Ha98tPUL4OKWi3eNnt-1Sba7L8470u06g/edit">Documentation for testing library</a></p>
-    <p>Error? <a href="https://jsonlint.com/?code=">Use JSON validator</a></p>  
+    <p><img src="noun_Book_3716540.svg" class="icon small"><span>&nbsp;&nbsp;</span><a href="https://docs.google.com/document/d/1hkNr78mrU3Ha98tPUL4OKWi3eNnt-1Sba7L8470u06g/edit">Documentation for testing library</a></p>
+    <p><img src="noun_Error_3671601.svg" class="icon small">&nbsp;&nbsp;<span>Error? </span><a href="https://jsonlint.com/?code=">Use JSON validator</a></p>  
   </section>
 
   <section id="data_container">
@@ -169,13 +175,22 @@
     <p id="ignore_warning" class="ok message">Something is wrong with the list. Using default values. See error below.</p>
     <!-- and/or try <a href='https://javascriptvalidator.net/'>a js validator</a>.</p> -->
 
-    <button class="toggler" for="options_container">▼ Edit options</button>
+    <button class="toggler" for="options_container">▼ Edit test options</button>
     <div id="options_container" class="togglee collapsed">
-      <label for="yaml_file_name">Name of the interview's YAML file:</label>
-      <input id="yaml_file_name" type="text" name="yaml_file_name" value="no_extension_just_name">
+      <div>
+        <label for="yaml_file_name">Name of the interview's YAML file:</label>
+        <input id="yaml_file_name" type="text" name="yaml_file_name" value="no_extension_just_name">
+      </div>
 
-      <label for="num_signatures">How many people sign?</label>
-      <input type="number" name="num_signatures" id="num_signatures" value="0">  
+      <div>
+        <label for="question_id">Final question id:</label>
+        <input id="question_id" type="text" name="question_id" value="a question id">
+      </div>
+
+      <div>
+        <label for="num_signatures">How many people sign?</label>
+        <input type="number" name="num_signatures" id="num_signatures" value="0">  
+      </div>
     </div>
 
     <button class="toggler" for="ignore_container">▼ Edit ignored variables</button>

@@ -172,7 +172,7 @@ let parse_elements = function(var_name, elements, story) {
           story: story,
         });
       } else {
-        console.warn( 'Sorry, something has not been accounted for. You will have to do some editing to get this to work. (1)', var_name, typeof choice_value);
+        console.warn( 'Sorry, something has not been accounted for. You will have to do some editing to get this to work. (1)', var_name, typeof element_value);
       }
     }  // ends for choice in elements
     // In case all elements were false, we
@@ -243,18 +243,41 @@ let get_story = function( vars, story ) {
 // ============================
 let scenario = document.getElementById( 'scenario' );
 let output = '';
-let num_signature_rows = 0;
-let yaml_file_name = 'YAML_file_name_without_extension';
+
+let get_num_signature_rows = function () {
+  let node = document.getElementById( 'num_signatures' );
+  let rows = 0;
+  if ( node && node.value && node.value !== '' ) {
+    rows = parseInt( node.value );
+  }
+  return rows;
+}
+
+let get_YAML_file_name = function () {
+  let node = document.getElementById( 'yaml_file_name' );
+  let name = 'no_extension_just_name';
+  if ( node && node.value && node.value !== '' ) {
+    name = node.value.replace( /\.yml$/, '' );
+  }
+  return name;
+}
+
+let get_question_id = function () {
+  let node = document.getElementById( 'question_id' );
+  let id = 'a question id';
+  if ( node && node.value && node.value !== '' ) {
+    id = node.value;
+  }
+  return id;
+}
 
 let get_test_start = function () {
-  let test_start = ''
-  test_start += `\nScenario: Quick description of specific example`;
-  test_start += `\n\u00A0\u00A0Given I start the interview at "${ yaml_file_name }"`
-  test_start += `\n\u00A0\u00A0And the user gets to "some question id" with this data:`
+  let test_start = `\nScenario: Quick description of specific example`;
+  test_start += `\n\u00A0\u00A0Given I start the interview at "${ get_YAML_file_name() }"`;
+  test_start += `\n\u00A0\u00A0And the user gets to "${ get_question_id() }" with this data:`;
   test_start += `\n\u00A0\u00A0\u00A0\u00A0| var | choice | value |`;
   return test_start;
 }
-get_test_start();
 
 scenario.innerText = get_test_start();
 output = `\n\n${ get_test_start() }`;
@@ -269,6 +292,9 @@ let tableInput = document.getElementById( 'da_data' );
 let data_error = document.querySelector( 'section#data_container .error_output' );
 
 let update_output = function () {
+  output = '\n\n@generated';
+  let story = [];
+
   let data = null;
   let vars = null;
   try {
@@ -276,31 +302,31 @@ let update_output = function () {
     vars = data.variables;
     da_warning.classList.remove('error');
     data_error.innerText = '';
+
+    // Get data
+    get_story( vars, story );
+
+    // Add early part of test
+    let test_length = `slow`;
+    if ( story.length <= 20 ) { test_length = `fast`; }
+    output += ` @${ test_length }`;
+
+  // If no input or erroring input
   } catch (err) {
     if ( tableInput.value !== '' ) {
-      console.warn( data );
+      console.warn(err);
       da_warning.classList.add('error');
       data_error.innerText = err;
-      output = `\n\n${ get_test_start() }`;
     }
-    return;
   }
   
-  let story = [];
-  get_story( vars, story );
-
-  let test_length = `slow`;
-  if ( story.length <= 20 ) { test_length = `fast`; }
-  output = `\n\n@generated @${ test_length }`;
-  get_test_start();
   output += get_test_start();
-
+  // Add other rows if they exist
   for ( let row of story ) {
     output += `\n\u00A0\u00A0\u00A0\u00A0${ row }`;
   }
-
-  // Add signature rows
-  let sigs = Array(num_signature_rows);
+  // Add signature rows if they exist
+  let sigs = Array( get_num_signature_rows() );
   for ( let row of sigs ) {
     output += `\n\u00A0\u00A0\u00A0\u00A0|  |  | /sign |`;
   }
@@ -336,7 +362,7 @@ document.body.addEventListener( 'input', function( event ) {
         ignore_anywhere = JSON.parse( ignore_node.value );
         ignore_warning.classList.remove('error');
         ignore_error.innerText = '';
-        update_output
+        update_output();
       } catch (err) {
         console.warn(err);
         ignore_warning.classList.add('error');
@@ -388,28 +414,7 @@ document.body.addEventListener( 'click', ( event ) => {
   }
 });  // End listen for click
 
-document.body.addEventListener( 'input', function ( event ) {
-  let target = event.target;
-  if ( target.id === 'num_signatures' ) {
-
-    if ( target.value && target.value !== '' ) {
-      num_signature_rows = parseInt( target.value );
-    } else {
-      num_signature_rows = 0;
-    }
-
-  } else if ( target.id === 'yaml_file_name' ) {
-
-    if ( target.value && target.value !== '' ) {
-      yaml_file_name = target.value.replace( /\.yml$/, '' );
-    } else {
-      yaml_file_name = 'interview_YAML_file_name_without_extension';
-    }
-    
-  }
-
-  update_output();
-})
+document.body.addEventListener( 'input', update_output );
 
 
 // ============================
