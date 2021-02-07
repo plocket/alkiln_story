@@ -291,6 +291,12 @@ let update_output = function () {
     output += `\n\u00A0\u00A0\u00A0\u00A0${row}`;
   }
 
+  // Add signature rows
+  let sigs = Array(num_signature_rows);
+  for ( let row of sigs ) {
+    output += `\n\u00A0\u00A0\u00A0\u00A0|  |  | /sign |`;
+  }
+
   scenario.innerText = output;
 };
 
@@ -373,6 +379,20 @@ document.body.addEventListener( 'click', ( event ) => {
     reset_ignore_elem();
   }
 });  // End listen for click
+
+let num_signature_rows = 0;
+document.body.addEventListener( 'input', function ( event ) {
+  let target = event.target;
+  if ( target.id === 'num_signatures' ) {
+    if ( target.value && target.value !== '' ) {
+      num_signature_rows = parseInt( target.value );
+
+    } else {
+      num_signature_rows = 0;
+    }
+    update_output();
+  }
+})
 
 
 // ============================

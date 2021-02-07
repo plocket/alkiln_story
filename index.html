@@ -139,6 +139,12 @@
       display: block;
       color: red;
     }
+
+    label, input {
+      display: inline-block;
+      width: fit-content;
+    }
+
   </style>
 </head>
 <body>
@@ -154,18 +160,27 @@
   <section id="data_container">
     <p id="da_data_warning" class="ok message">Something is wrong with the data. See error below.</p>
       <!-- and/or try <a href='https://javascriptvalidator.net/'>a js validator</a>.</p> -->
-    <p>Paste your docassemble variable code into this text box:</p>
+    <p>Paste your docassemble variable data into this text box:</p>
     <textarea id="da_data" placeholder="Paste data here" rows="4"></textarea>
     <div class="error_output"></div>
   </section>
 
   <section id="ignore_lists_container">
     <p id="ignore_warning" class="ok message">Something is wrong with the list. Using default values. See error below.</p>
-     <!-- and/or try <a href='https://javascriptvalidator.net/'>a js validator</a>.</p> -->
-    <button class="toggler" for="ignore_container">▼ Edit ignored variables</button>
-    <!-- <input type="text" name="" id="num_signatures"> -->
+    <!-- and/or try <a href='https://javascriptvalidator.net/'>a js validator</a>.</p> -->
 
+    <button class="toggler" for="options_container">▼ Edit options</button>
+    <div id="options_container" class="togglee collapsed">
+      <!-- <label for="yaml_file_name">Name of the interview's YAML file</label> -->
+      <!-- <input id="yaml_file_name" type="text" name="yaml_file_name" value="interview_YAML_file_name_without_extension"> -->
+
+      <label for="num_signatures">How many people sign?</label>
+      <input type="number" name="num_signatures" id="num_signatures" value="0">  
+    </div>
+
+    <button class="toggler" for="ignore_container">▼ Edit ignored variables</button>
     <div id="ignore_container" class="togglee collapsed">
+
       <p>Automatically ignored:</p>
       <p id="auto_ignored_keys_only"></p>
       <br>
