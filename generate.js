@@ -150,6 +150,8 @@ let parse_elements = function(var_name, elements, story) {
   if (Array.isArray(elements)) {
     parse_arr( var_name, elements, story );
   } else {
+    // It's an object
+    if ( elements.instanceName ) { var_name = value.instanceName; }
     let were_checkboxes = false;
     let true_found = false;
     for ( let element in elements ) {
