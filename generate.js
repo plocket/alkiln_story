@@ -92,7 +92,7 @@ A2.5: ~Don't do that?~ nvm, taking care of that in test-generating code.
 // ============================
 // Building the table
 // ============================
-let add_story_row = function(name, choice, value, story) {
+let add_story_row = function({ name, choice, value, story }) {
 
   // Ignore text we should ignore wherever it appears, even in a fully formed variable name
   if (ignore_anywhere.includes( name )) { return; }
@@ -123,14 +123,19 @@ let parse_arr = function(name, arr, story) {
 
     let value = arr[index];
     if (typeof value === 'string' || typeof value === 'number' ) {
-      add_story_row( var_name, '', value, story );
+      add_story_row({
+        name: var_name,
+        choice: '',
+        value: value,
+        story: story,
+      });
     } else if (Array.isArray(value)) {
       parse_arr( var_name, value, story );
     } else if ( typeof value === 'object' ) {
       parse_dict({
         name_start: var_name,
         choice: '',
-        dict: value,
+        vars_obj: value,
         story: story
       });
     } else {
@@ -143,7 +148,12 @@ let add_bool = function(var_name, value, story) {
   // Checkbox yes/no should end in true or false depending on value. Radio doesn't care about value. Radio does care about choice (True or False).
   let str = value.toString()
   let caps = str.charAt(0).toUpperCase() + str.slice(1);
-  add_story_row( var_name, caps, str, story );
+  add_story_row({
+    name: var_name,
+    choice: caps,
+    value: str,
+    story: story,
+  });
 };
 
 let parse_elements = function(var_name, elements, story) {
@@ -156,7 +166,12 @@ let parse_elements = function(var_name, elements, story) {
       let element_value = elements[ element ];
       let type = typeof element_value;
       if (type === 'string' || type === 'number' || type === 'boolean' ) {
-        add_story_row( var_name, element , element_value, story );
+        add_story_row({
+          name: var_name,
+          choice: element,
+          value: element_value,
+          story: story,
+        });
         if ( type === 'boolean' ) {
           were_checkboxes = true;
         }
@@ -168,7 +183,7 @@ let parse_elements = function(var_name, elements, story) {
         parse_dict({
           name_start: var_name,
           choice: '',
-          dict: element_value,
+          vars_obj: element_value,
           story: story,
         });
       } else {
@@ -178,31 +193,36 @@ let parse_elements = function(var_name, elements, story) {
     // In case all elements were false, we
     if ( were_checkboxes && !true_found ) {
       // choice name is just for comfort here
-      add_story_row( var_name, 'None' , true, story );
+      add_story_row({
+        name: var_name,
+        choice: true,
+        value: 'None',
+        story: story,
+      });
     }
   }  // ends typeof elements
 };
 
-let parse_dict = function({name_start, choice, dict, story}, debug) {
-  for ( let key in dict ) {
-    if (keys_to_ignore.includes( key )) { continue; }
 
-    // Add element all on its own. Might not be valid, but it also might?
-    // I'm not sure which of these is the way to do it
-    let instanceName = dict.instanceName;
-    if ( instanceName ) {
-      add_story_row( name_start, '', instanceName, story );
-    }
+
+let parse_dict = function({name_start, choice, vars_obj, story}, debug) {
+  for ( let key in vars_obj ) {
+    if (keys_to_ignore.includes( key )) { continue; }
 
     let var_name = key;
     if (name_start !== '' ) {
       var_name = name_start + '.' + key;
     }
-    let value = dict[ key ];
+    let value = vars_obj[ key ];
 
     let val_type = typeof value;
     if (val_type === 'string' || val_type === 'number' ) {
-      add_story_row( var_name, '', value, story );
+      add_story_row({
+        name: var_name,
+        choice: '',
+        value: value,
+        story: story,
+      });
 
     } else if (val_type === 'boolean' ) {
       add_bool(var_name, value, story);
@@ -220,7 +240,7 @@ let parse_dict = function({name_start, choice, dict, story}, debug) {
       parse_dict({
         name_start: var_name,
         choice: '',
-        dict: new_dict,
+        vars_obj: new_dict,
         story: story,
       });
     }
@@ -231,10 +251,20 @@ let get_story = function( vars, story ) {
   return parse_dict({
     name_start: '',
     choice: '',
-    dict: vars,
+    vars_obj: vars,
     story: story,
   });
 };  // Ends get_story()
+
+
+
+// ============================
+// ============================
+// ============================
+// UI
+// ============================
+// ============================
+// ============================
 
 
 
@@ -281,7 +311,6 @@ let get_test_start = function () {
 
 scenario.innerText = get_test_start();
 output = `\n\n${ get_test_start() }`;
-
 
 
 // ============================
