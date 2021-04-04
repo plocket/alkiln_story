@@ -1,0 +1,202 @@
+{
+  "encrypted": true, 
+  "i": "docassemble.playground12ALTestingTestMain:all_tests.yml", 
+  "steps": 12, 
+  "success": true, 
+  "uid": "gRRODwC7rHA1EcfCn5kyLQMYWMkUewbS", 
+  "variables": {
+    "_internal": {
+      "accesstime": {
+        "12": "2021-04-04T18:41:51.075020"
+      }, 
+      "answered": [], 
+      "answers": {}, 
+      "device_local": {
+        "yYAIyahyFSylBQBw": {
+          "_class": "docassemble.base.core.DADeviceLocal", 
+          "instanceName": "device_local"
+        }
+      }, 
+      "dirty": {}, 
+      "doc_cache": {}, 
+      "docvar": {}, 
+      "event_stack": {
+        "f69adec641": [
+          {
+            "action": "end", 
+            "arguments": {}, 
+            "context": {}
+          }
+        ]
+      }, 
+      "gather": [], 
+      "informed": {}, 
+      "livehelp": {
+        "availability": "unavailable", 
+        "mode": "help", 
+        "partner_roles": [], 
+        "roles": []
+      }, 
+      "misc": {}, 
+      "modtime": "2021-04-04T18:41:51.075020", 
+      "objselections": {}, 
+      "progress": 0, 
+      "referer": "https://apps-dev.suffolklitlab.org/playground?project=ALTestingTestMain&file=all_tests.yml", 
+      "secret": null, 
+      "session_local": {
+        "f69adec641": {
+          "_class": "docassemble.base.core.DASessionLocal", 
+          "instanceName": "session_local"
+        }
+      }, 
+      "starttime": "2021-04-04T18:40:39.372433", 
+      "steps": 12, 
+      "steps_offset": 0, 
+      "tasks": {}, 
+      "tracker": 16, 
+      "user_local": {
+        "12": {
+          "_class": "docassemble.base.core.DAUserLocal", 
+          "instanceName": "user_local"
+        }
+      }
+    }, 
+    "button_continue": true, 
+    "buttons_other": "button_2", 
+    "buttons_yesnomaybe": null, 
+    "checkboxes_other": {
+      "_class": "docassemble.base.core.DADict", 
+      "ask_number": false, 
+      "ask_object_type": false, 
+      "auto_gather": false, 
+      "complete_attribute": null, 
+      "elements": {
+        "checkbox_other_opt_1": false, 
+        "checkbox_other_opt_2": true, 
+        "checkbox_other_opt_3": true
+      }, 
+      "gathered": true, 
+      "instanceName": "checkboxes_other", 
+      "minimum_number": null, 
+      "object_type": null, 
+      "object_type_parameters": {}
+    }, 
+    "checkboxes_yesno": false, 
+    "direct_showifs": true, 
+    "direct_standard_fields": true, 
+    "dropdown_test": "dropdown_opt_2", 
+    "nav": {
+      "current": null, 
+      "hidden": false, 
+      "past": [], 
+      "progressive": true
+    }, 
+    "proxy_list": {
+      "_class": "docassemble.base.core.DAList", 
+      "ask_number": false, 
+      "ask_object_type": false, 
+      "auto_gather": true, 
+      "complete_attribute": null, 
+      "elements": [
+        {
+          "_class": "docassemble.base.util.Individual", 
+          "address": {
+            "_class": "docassemble.base.util.Address", 
+            "city_only": false, 
+            "geolocated": false, 
+            "instanceName": "proxy_list[0].address", 
+            "location": {
+              "_class": "docassemble.base.util.LatitudeLongitude", 
+              "gathered": false, 
+              "instanceName": "proxy_list[0].address.location", 
+              "known": false
+            }
+          }, 
+          "instanceName": "proxy_list[0]", 
+          "location": {
+            "_class": "docassemble.base.util.LatitudeLongitude", 
+            "gathered": false, 
+            "instanceName": "proxy_list[0].location", 
+            "known": false
+          }, 
+          "name": {
+            "_class": "docassemble.base.util.IndividualName", 
+            "first": "proxy 1", 
+            "instanceName": "proxy_list[0].name", 
+            "uses_parts": true
+          }
+        }, 
+        {
+          "_class": "docassemble.base.util.Individual", 
+          "address": {
+            "_class": "docassemble.base.util.Address", 
+            "city_only": false, 
+            "geolocated": false, 
+            "instanceName": "proxy_list[1].address", 
+            "location": {
+              "_class": "docassemble.base.util.LatitudeLongitude", 
+              "gathered": false, 
+              "instanceName": "proxy_list[1].address.location", 
+              "known": false
+            }
+          }, 
+          "instanceName": "proxy_list[1]", 
+          "location": {
+            "_class": "docassemble.base.util.LatitudeLongitude", 
+            "gathered": false, 
+            "instanceName": "proxy_list[1].location", 
+            "known": false
+          }, 
+          "name": {
+            "_class": "docassemble.base.util.IndividualName", 
+            "first": "proxy 2", 
+            "instanceName": "proxy_list[1].name", 
+            "uses_parts": true
+          }
+        }
+      ], 
+      "instanceName": "proxy_list", 
+      "minimum_number": null, 
+      "object_type": {
+        "_class": "type", 
+        "name": "docassemble.base.util.Individual"
+      }, 
+      "object_type_parameters": {}, 
+      "there_are_any": true
+    }, 
+    "radio_other": "radio_other_opt_2", 
+    "radio_yesno": false, 
+    "screen_features": true, 
+    "show_2": true, 
+    "show_3": true, 
+    "showif_checkbox_yesno": false, 
+    "showif_dropdown": "showif_dropdown_4", 
+    "showif_radio_other": "showif_radio_multi_2", 
+    "showif_text_input": "showif text input", 
+    "showif_textarea": "showif\r\nmulti\r\nline", 
+    "showif_yesnoradio": false, 
+    "signature_1": {
+      "_class": "docassemble.base.core.DAFile", 
+      "extension": "png", 
+      "filename": "canvas.png", 
+      "has_specific_filename": true, 
+      "instanceName": "signature_1", 
+      "mimetype": "image/png", 
+      "number": 56859, 
+      "ok": true
+    }, 
+    "signature_2": {
+      "_class": "docassemble.base.core.DAFile", 
+      "extension": "png", 
+      "filename": "canvas.png", 
+      "has_specific_filename": true, 
+      "instanceName": "signature_2", 
+      "mimetype": "image/png", 
+      "number": 56860, 
+      "ok": true
+    }, 
+    "text_input": "regular text input", 
+    "textarea": "regular\r\nmulti\r\nline", 
+    "url_args": {}
+  }
+}
