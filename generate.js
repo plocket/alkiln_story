@@ -319,17 +319,17 @@ let get_question_id = function () {
   return id;
 }
 
-// let get_scenario_description = function () {
-//   let node = document.getElementById( 'scenario_description' );
-//   let description = 'Has special circumstance';
-//   if ( node && node.value && node.value !== '' ) {
-//     description = node.value;
-//   }
-//   return description;
-// }
+let get_scenario_description = function () {
+  let node = document.getElementById( 'scenario_description' );
+  let description = 'User has special circumstance';
+  if ( node && node.value && node.value !== '' ) {
+    description = node.value;
+  }
+  return description;
+}
 
 let get_test_start = function () {
-  let test_start = `\nScenario: Quick description of specific example`;
+  let test_start = `\nScenario: ${ get_scenario_description() }`;
   test_start += `\n\u00A0\u00A0Given I start the interview at "${ get_YAML_file_name() }"`;
   test_start += `\n\u00A0\u00A0And the user gets to "${ get_question_id() }" with this data:`;
   test_start += `\n\u00A0\u00A0\u00A0\u00A0| var | value | checked |`;
