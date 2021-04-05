@@ -1,6 +1,8 @@
 Feature: Description of broad purpose for all scenarios in here
 
 Note: What v1 looked like
+Was missing:
+| buttons_yesnomaybe | None | true |
 
 @generated @slow
 Scenario: Quick description of specific example

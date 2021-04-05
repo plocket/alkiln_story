@@ -41,7 +41,7 @@ let ignore_anywhere_default = [
   'multi_user',
   // --- files
   'file_info',
-  'filename',
+  // 'filename',  // Possibility to identify some signatures
   'persistent',
   'private',
   'convert_to_pdf_a',
@@ -86,173 +86,191 @@ Q2.5: Followup to Q2 - what if the quotes are meant to be there?
 A2.5: ~Don't do that?~ nvm, taking care of that in test-generating code.
 */
 
-// DONE? checkbox 'none of the above' doesn't get created when needed.
-
 
 // ============================
 // Building the table
 // ============================
-let add_story_row = function({ name, choice, value, story }) {
+let get_story_row = function({ name, value, checked }, debug=false) {
+  let row;
 
   // Ignore text we should ignore wherever it appears, even in a fully formed variable name
-  if (ignore_anywhere.includes( name )) { return; }
+  if ( ignore_anywhere.includes( name )) { return row; }
   for ( let to_ignore of ignore_anywhere ) {
-    if ( name.includes( to_ignore ) ) { return; }
-    // ignore choice too?
+    if ( name.includes( to_ignore ) ) { return row; }
   }
 
-  if (typeof value === 'string' ) {
-    value = JSON.stringify(value);
-    value = value.substring(1, value.length - 1);
-    // DONE: Dates are dumb.
+  if ( typeof value === 'string' ) {
+    value = JSON.stringify( value );  // to escape quotes and such?
+    value = value.substring(1, value.length - 1);  // get rid of JSON quotes?
+    // Dates are dumb.
     value = value.replace(/(\d\d\d\d)-(\d\d)-(\d\d)T\d\d:\d\d:\d\d-\d\d:\d\d/, '$2/$3/$1' );
   }
-  let row = `| ${name} | ${choice} | ${value} |`;
-  // If it isn't already in the variable table, add it
-  if ( story.indexOf( row ) === -1 ){
-    story.push( row );
+
+  // Try to guess signatures
+  if ( name.endsWith( `.filename` ) && value === `canvas.png` ) {
+    name = name.replace( '.filename', '' );
+    value = '/sign';
   }
-};
 
-// let parse_terminator = function( name, value, story ) {
-// }
+  row = `| ${ name } | ${ value } | ${ checked } |`;
+  row = row.replace(/ /g, '\u00A0');  // Avoid collapsing multiple sapces (darn HTML!)
 
-let parse_arr = function(name, arr, story) {
-  for (let index = 0; index < arr.length; index++) {
-    let var_name = `${name}[${index}]`;
-
-    let value = arr[index];
-    if (typeof value === 'string' || typeof value === 'number' ) {
-      add_story_row({
-        name: var_name,
-        choice: '',
-        value: value,
-        story: story,
-      });
-    } else if (Array.isArray(value)) {
-      parse_arr( var_name, value, story );
-    } else if ( typeof value === 'object' ) {
-      parse_dict({
-        name_start: var_name,
-        choice: '',
-        vars_obj: value,
-        story: story
-      });
-    } else {
-      console.warn( 'Sorry, something has not been accounted for. You will have to do some editing to get this to work. (2)', var_name, typeof value);
-    }
-  }
-}
-
-let add_bool = function(var_name, value, story) {
-  // Checkbox yes/no should end in true or false depending on value. Radio doesn't care about value. Radio does care about choice (True or False).
-  let str = value.toString()
-  let caps = str.charAt(0).toUpperCase() + str.slice(1);
-  add_story_row({
-    name: var_name,
-    choice: caps,
-    value: str,
-    story: story,
-  });
-};
-
-let parse_elements = function(var_name, elements, story) {
-  if (Array.isArray(elements)) {
-    parse_arr( var_name, elements, story );
-  } else {
-    let were_checkboxes = false;
-    let true_found = false;
-    for ( let element in elements ) {
-      let element_value = elements[ element ];
-      let type = typeof element_value;
-      if (type === 'string' || type === 'number' || type === 'boolean' ) {
-        add_story_row({
-          name: var_name,
-          choice: element,
-          value: element_value,
-          story: story,
-        });
-        if ( type === 'boolean' ) {
-          were_checkboxes = true;
-        }
-        if (element_value === true) {
-          true_found = true;
-        }
-      } else if ( typeof element_value === 'object' ) {
-        if (keys_to_ignore.includes( var_name )) { continue; }
-        parse_dict({
-          name_start: var_name,
-          choice: '',
-          vars_obj: element_value,
-          story: story,
-        });
-      } else {
-        console.warn( 'Sorry, something has not been accounted for. You will have to do some editing to get this to work. (1)', var_name, typeof element_value);
-      }
-    }  // ends for choice in elements
-    // In case all elements were false, we
-    if ( were_checkboxes && !true_found ) {
-      // choice name is just for comfort here
-      add_story_row({
-        name: var_name,
-        choice: true,
-        value: 'None',
-        story: story,
-      });
-    }
-  }  // ends typeof elements
-};
+  return row;
+};  // End get_story_row()
 
 
+// yield. Maybe. Not supported by IE and a bit weird in Node.js
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield
+// creating an array out of some input
+// generator function that yields each item
+// caller: I invoke a gen func that returns an iterable
+// use `for of` on the iterable. composes/symetrical.
+// Not using higher order funcs anymore. async and await can be more natural.
 
-let parse_dict = function({name_start, choice, vars_obj, story}, debug) {
-  for ( let key in vars_obj ) {
-    if (keys_to_ignore.includes( key )) { continue; }
+let parse = {};
+
+parse.all = function ({name, value, checked }, debug) {
+  let all = [];
+
+  for ( let key in value ) {
+    if ( keys_to_ignore.includes( key )) { continue; }
+    if ( ignore_anywhere_default.includes( key )) { continue; }  // logging everything was annoying
 
     let var_name = key;
-    if (name_start !== '' ) {
-      var_name = name_start + '.' + key;
+    if (name !== '' ) { var_name = name + '.' + key; }
+    let new_value = value[ key ];
+    let val_type = typeof new_value;
+
+    let rows = [];
+    if ( Array.isArray( new_value )) {
+      rows = parse.array({ name: var_name, value: new_value, checked: '', }, debug);
+
+    } else if ( new_value === null ) {
+      rows = parse.null({ name: var_name, value: new_value, checked: '', }, debug);
+
+    } else if ( new_value !== null && parse[ val_type ] ) {
+      rows = parse[ val_type ]({ name: var_name, value: new_value, checked: '', }, debug);
+    
+    } else {
+      console.warn( 'Sorry, something has not been accounted for. You will have to do some editing to get this to work.', var_name, typeof value);
     }
-    let value = vars_obj[ key ];
 
-    let val_type = typeof value;
-    if (val_type === 'string' || val_type === 'number' ) {
-      add_story_row({
-        name: var_name,
-        choice: '',
-        value: value,
-        story: story,
-      });
+    all = all.concat( rows );
+  }  // ends for key in value
 
-    } else if (val_type === 'boolean' ) {
-      add_bool(var_name, value, story);
-
-    } else if (Array.isArray(value)) {
-      parse_arr( var_name, value, story );
-
-    } else if ( typeof value === 'object' && value !== null ) {
-      if ( value.instanceName ) { var_name = value.instanceName }
-      let {elements, ...new_dict} = value;
-      if (elements) {
-        parse_elements( var_name, elements, story );
-      }
-      // Debugging, so keeping logs clean for now
-      parse_dict({
-        name_start: var_name,
-        choice: '',
-        vars_obj: new_dict,
-        story: story,
-      });
+  // Get unique rows that are strings (removing `undefined`)
+  let story = [];
+  for ( let row of all ) {
+    if ( story.indexOf( row ) === -1 && typeof row === 'string' ){
+      story.push( row );
     }
   }
-}
 
-let get_story = function( vars, story ) {
-  return parse_dict({
-    name_start: '',
-    choice: '',
-    vars_obj: vars,
-    story: story,
+  return story;
+};  // End parse.all()
+
+
+parse.elements = function ({ name, value, checked }, debug) {
+  let rows = [];
+
+  // If it's a non-array object
+  if ( !Array.isArray( value )) {
+    // See if we need a 'none of the above' row
+    let were_checkboxes = false;
+    let any_true = false;
+    for ( let element_key in value ) {
+      let one_row;
+      if ( typeof value[ element_key ] === 'boolean' ) {
+        // Can this sometimes be buttons?
+        were_checkboxes = true;
+        if ( value[ element_key ] === true ) {
+          any_true = true;
+        }
+
+        // Multi-option checkbox fields are different than others
+        let one_row = get_story_row({
+          name: name,
+          value: element_key,
+          checked: value[ element_key ],
+        }, debug);
+        rows.push( one_row );
+      } else {
+
+        // Not sure when this would happen
+        rows = rows.concat(parse.all({ name, value, checked }, debug));
+
+      }
+    }  // ends for choice in value
+
+    // If all checkboxes were false, we need a 'none of the above' row
+    if ( were_checkboxes ) {
+      if ( !any_true ) {
+        let nota_row = get_story_row({ name: name, value: 'None', checked: true, }, debug );
+        rows.push( nota_row );
+      } else {
+        let nota_row = get_story_row({ name: name, value: 'None', checked: false, }, debug );
+        rows.push( nota_row );
+      }
+    }
+  } else {
+    rows = rows.concat( parse.all({ name, value, checked }, debug) );
+  }
+
+  return rows;
+};  // Ends parse.elements()
+
+
+parse.object = function ({ name, value, checked }, debug) {
+  if ( value.instanceName ) { name = value.instanceName; }
+  let { elements, ...new_obj } = value;
+  if ( elements ) {  // Skip adding `element` to the name
+    return parse.elements({ name, value: elements, checked: '', }, debug);
+  }
+  return parse.all({ name, value: new_obj, checked: '', }, debug);
+};  // Ends parse.object()
+
+
+parse.array = function ({ name, value, checked }, debug ) {
+  // When does this happen? I know there are times...
+  let rows = [];
+  for (let index = 0; index < value.length; index++) {
+    // Add to the name and send it to loop through again
+    let var_name = `${ name }[${ index }]`;
+    let  item = value[ index ];
+    rows = parse.all({ name: var_name, value: item, checked: '', }, debug);
+  }
+  return rows;
+};  // Ends parse.array()
+
+
+parse.null = function ({ name, value, checked }, debug) {
+  return [get_story_row({ name: name, value: 'None', checked: 'true', })];
+};  // Ends parse.null()
+
+
+parse.string = function ({ name, value, checked }, debug) {
+  return [get_story_row({ name: name, value: value, checked: '', })];
+};  // Ends parse.string()
+
+
+parse.number = function ({ name, value, checked }, debug) {
+  return [get_story_row({ name: name, value: value, checked: '', })];
+};  // Ends parse.number()
+
+
+parse.boolean = function ({ name, value, checked }, debug) {
+  // Checkbox, radioyesno, or yesno buttons
+  let str = value.toString();
+  let caps = str.charAt(0).toUpperCase() + str.slice(1);  // Turn into 'True' or 'False'
+  return [get_story_row({ name: name, value: caps, checked: str, })];
+};  // Ends parse.boolean()
+
+
+
+let get_story = function( vars ) {
+  return parse.all({
+    name: '',
+    value: vars,
   });
 };  // Ends get_story()
 
@@ -274,18 +292,18 @@ let get_story = function( vars, story ) {
 let scenario = document.getElementById( 'scenario' );
 let output = '';
 
-let get_num_signature_rows = function () {
-  let node = document.getElementById( 'num_signatures' );
-  let rows = 0;
-  if ( node && node.value && node.value !== '' ) {
-    rows = parseInt( node.value );
-  }
-  return rows;
-}
+// let get_num_signature_rows = function () {
+//   let node = document.getElementById( 'num_signatures' );
+//   let rows = 0;
+//   if ( node && node.value && node.value !== '' ) {
+//     rows = parseInt( node.value );
+//   }
+//   return rows;
+// }
 
 let get_YAML_file_name = function () {
   let node = document.getElementById( 'yaml_file_name' );
-  let name = 'no_extension_just_name';
+  let name = 'name_of_yaml_file';
   if ( node && node.value && node.value !== '' ) {
     name = node.value.replace( /\.yml$/, '' );
   }
@@ -301,11 +319,20 @@ let get_question_id = function () {
   return id;
 }
 
+// let get_scenario_description = function () {
+//   let node = document.getElementById( 'scenario_description' );
+//   let description = 'Has special circumstance';
+//   if ( node && node.value && node.value !== '' ) {
+//     description = node.value;
+//   }
+//   return description;
+// }
+
 let get_test_start = function () {
   let test_start = `\nScenario: Quick description of specific example`;
   test_start += `\n\u00A0\u00A0Given I start the interview at "${ get_YAML_file_name() }"`;
   test_start += `\n\u00A0\u00A0And the user gets to "${ get_question_id() }" with this data:`;
-  test_start += `\n\u00A0\u00A0\u00A0\u00A0| var | choice | value |`;
+  test_start += `\n\u00A0\u00A0\u00A0\u00A0| var | value | checked |`;
   return test_start;
 }
 
@@ -333,7 +360,7 @@ let update_output = function () {
     data_error.innerText = '';
 
     // Get data
-    get_story( vars, story );
+    story = story.concat( get_story( vars ));
 
     // Add early part of test
     let test_length = `slow`;
@@ -341,9 +368,9 @@ let update_output = function () {
     output += ` @${ test_length }`;
 
   // If no input or erroring input
-  } catch (err) {
+  } catch ( err) {
     if ( tableInput.value !== '' ) {
-      console.warn(err);
+      console.warn( err );
       da_warning.classList.add('error');
       data_error.innerText = err;
     }
@@ -354,11 +381,11 @@ let update_output = function () {
   for ( let row of story ) {
     output += `\n\u00A0\u00A0\u00A0\u00A0${ row }`;
   }
-  // Add signature rows if they exist
-  let sigs = Array( get_num_signature_rows() );
-  for ( let row of sigs ) {
-    output += `\n\u00A0\u00A0\u00A0\u00A0|  |  | /sign |`;
-  }
+  // // Add signature rows if they exist
+  // let sigs = Array( get_num_signature_rows() );
+  // for ( let row of sigs ) {
+  //   output += `\n\u00A0\u00A0\u00A0\u00A0|  |  | /sign |`;
+  // }
 
   scenario.innerText = output;
 };
@@ -375,7 +402,7 @@ auto_ignored.innerText = JSON.stringify( keys_to_ignore );
 
 let ignore_anywhere = [];
 let ignore_warning = document.getElementById( 'ignore_warning' );
-let ignore_error = document.querySelector( 'section#ignore_lists_container .error_output' );
+let ignore_error = document.querySelector( 'section#extra_options_container .error_output' );
 
 let to_fit = ['ignore_anywhere'];
 document.body.addEventListener( 'input', function( event ) {
@@ -402,8 +429,8 @@ let handle_ignore_error = function () {
       ignore_anywhere = JSON.parse( ignore_node.value );
       ignore_warning.classList.remove('error');
       ignore_error.innerText = '';
-    } catch (err) {
-      console.warn(err);
+    } catch ( err) {
+      console.warn( err );
       ignore_warning.classList.add('error');
       ignore_error.innerText = err;
       ignore_anywhere = ignore_anywhere_default_alphabetical;  // use default

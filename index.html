@@ -151,6 +151,27 @@
       width: fit-content;
     }
 
+    .one_line_field_container {
+      width: 100%;
+      display: table;
+    }
+
+    #custom_values_container input {
+      width: 100%;
+      display: table-cell;
+    }
+
+    #custom_values_container label {
+      width: 15em;
+      display: table-cell;
+    }
+
+    .example {
+      margin-top: -0.2em;
+      font-size: 0.8em;
+      color: #606060;
+    }
+
     #ignore_anywhere_container { position: relative; }
 
   </style>
@@ -173,26 +194,10 @@
     <div class="error_output"></div>
   </section>
 
-  <section id="ignore_lists_container">
+  <section id="extra_options_container">
     <!-- and/or try <a href='https://javascriptvalidator.net/'>a js validator</a>.</p> -->
 
-    <button class="toggler" for="options_container">▼ Edit test options</button>
-    <div id="options_container" class="togglee collapsed">
-      <div>
-        <label for="yaml_file_name">Name of the interview's YAML file:</label>
-        <input id="yaml_file_name" type="text" name="yaml_file_name" value="no_extension_just_name">
-      </div>
-
-      <div>
-        <label for="question_id">Final question id:</label>
-        <input id="question_id" type="text" name="question_id" value="a question id">
-      </div>
-
-      <div>
-        <label for="num_signatures">How many people sign?</label>
-        <input type="number" name="num_signatures" id="num_signatures" value="0">  
-      </div>
-    </div>
+    <!-- <button class="toggler" for="options_container">▼ Edit test options</button> -->
 
     <button class="toggler" for="ignore_container">▼ Edit ignored variables</button>
     <div id="ignore_container" class="togglee collapsed">
@@ -212,6 +217,37 @@
       </div>
     <div class="error_output"></div>
     </div>
+  </section>
+
+  <section id="custom_values_container">
+    <div>
+      <div class="one_line_field_container">
+          <label for="yaml_file_name">Interview YAML file name:</label>
+          <input id="yaml_file_name" type="text" name="yaml_file_name" placeholder="name_of_yaml_file">
+      </div>
+      <div class="example">Example: <strong>file_a_motion</strong></div>
+    </div>
+
+    <div>
+      <div class="one_line_field_container">
+          <label for="question_id">Final question id:</label>
+          <input id="question_id" type="text" name="question_id" placeholder="a question id">
+      </div>
+      <div class="example">Example: <strong>next steps</strong></div>
+    </div>
+
+    <!-- <div>
+      <div class="one_line_field_container">
+          <label for="scenario_description">What is special about this user:</label>
+          <input id="scenario_description" type="text" name="scenario_description" placeholder="Has special circumstance">
+      </div>
+      <div class="example">Example: <strong>Court date has passed</strong></div>
+    </div> -->
+
+    <!-- <div>
+      <label for="num_signatures">How many people sign?</label>
+      <input type="number" name="num_signatures" id="num_signatures" value="0">  
+    </div> -->
   </section>
   
 
