@@ -113,7 +113,8 @@ let get_story_row = function({ name, value, checked }, debug=false) {
   }
 
   row = `| ${ name } | ${ value } | ${ checked } |`;
-  row = row.replace(/ /g, '\u00A0');  // Avoid collapsing multiple sapces (darn HTML!)
+  // The below creates ascii code `194 160` in the clipboard when user uses 'Copy' button
+  // row = row.replace(/ /g, '\u00A0');  // Avoid collapsing multiple sapces (darn HTML!)
 
   return row;
 };  // End get_story_row()
