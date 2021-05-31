@@ -208,9 +208,6 @@ parse.elements = function ({ name, value, checked }, debug) {
       if ( !any_true ) {
         let nota_row = get_story_row({ name: name, value: 'None', checked: true, }, debug );
         rows.push( nota_row );
-      } else {
-        let nota_row = get_story_row({ name: name, value: 'None', checked: false, }, debug );
-        rows.push( nota_row );
       }
     }
   } else {
