@@ -237,16 +237,16 @@ parse.elements = function ({ name, value, checked }, debug) {
 
 parse.object = function ({ name, value, checked }, debug) {
   if ( value.instanceName ) { name = value.instanceName; }
+  let rows = [];
 
   // `elements` can be (are always?) checkbox items
   let { elements, ...new_obj } = value;
   if ( elements ) {
     // Skip adding `element` to the name and don't get any other props
     // This `return`` might be what skips objects like trial_court
-    return parse.elements({ name, value: elements, checked: '', }, debug);
+    rows = parse.elements({ name, value: elements, checked: '', }, debug);
   }
 
-  let the_rest = [];
   for ( let key in new_obj ) {
     if ( keys_to_ignore.includes( key )) { continue; }
     if ( ignore_anywhere_default.includes( key )) { continue; }  // logging everything was annoying
@@ -256,12 +256,12 @@ parse.object = function ({ name, value, checked }, debug) {
     let new_value = new_obj[ key ];
     let val_type = typeof new_value;
     // Send the contents of the object to be filtered
-    let rows = parse.filter({ name: var_name, value: new_value, checked: '', }, debug);
+    let new_rows = parse.filter({ name: var_name, value: new_value, checked: '', }, debug);
 
-    the_rest = the_rest.concat( rows );
+    rows = rows.concat( new_rows );
   }  // ends for key in new_obj
 
-  return the_rest;
+  return rows;
 };  // Ends parse.object()
 
 

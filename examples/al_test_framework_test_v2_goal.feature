@@ -13,12 +13,15 @@ Scenario: User has special circumstance
     | checkboxes_other | checkbox_other_opt_1 | false |
     | checkboxes_other | checkbox_other_opt_2 | true |
     | checkboxes_other | checkbox_other_opt_3 | true |
+    | checkboxes_other.minimum_number | None | true |
     | checkboxes_yesno | False | false |
     | direct_showifs | True | true |
     | direct_standard_fields | True | true |
     | dropdown_test | dropdown_opt_2 |  |
     | proxy_list[0].name.first | proxy 1 |  |
     | proxy_list[1].name.first | proxy 2 |  |
+    | proxy_list.minimum_number | None | true |
+    | proxy_list.there_are_any | True | true |
     | radio_other | radio_other_opt_2 |  |
     | radio_yesno | False | false |
     | screen_features | True | true |
