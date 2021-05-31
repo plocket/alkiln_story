@@ -2,18 +2,17 @@ Feature: Description of broad purpose for all scenarios in here
 
 Note: What we want v2 to look like
 
-@generated @slow
-Scenario: Quick description of specific example
-  Given I start the interview at "no_extension_just_name"
+@generated @fast
+Scenario: User has special circumstance
+  Given I start the interview at "name_of_yaml_file"
   And the user gets to "a question id" with this data:
     | var | value | checked |
     | button_continue | True | true |
     | buttons_other | button_2 |  |
-    | buttons_yesnomaybe | None | true |
+    | buttons_yesnomaybe | None | true |
     | checkboxes_other | checkbox_other_opt_1 | false |
     | checkboxes_other | checkbox_other_opt_2 | true |
     | checkboxes_other | checkbox_other_opt_3 | true |
-    | checkboxes_other | None | false |
     | checkboxes_yesno | False | false |
     | direct_showifs | True | true |
     | direct_standard_fields | True | true |
@@ -32,6 +31,10 @@ Scenario: Quick description of specific example
     | showif_textarea | showif\r\nmulti\r\nline |  |
     | showif_yesnoradio | False | false |
     | signature_1 | /sign |  |
+    | signature_1.number | 56859 |  |
+    | signature_1.ok | True | true |
     | signature_2 | /sign |  |
+    | signature_2.number | 56860 |  |
+    | signature_2.ok | True | true |
     | text_input | regular text input |  |
     | textarea | regular\r\nmulti\r\nline |  |

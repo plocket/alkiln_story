@@ -144,31 +144,9 @@ let get_story_row = function({ name, value, checked }, debug=false) {
 
 let parse = {};
 
-parse.all = function ({name, value, checked }, debug) {
-  // Filters - makes sure each item in processed by the
-  // right function based on its type and constructs the story.
-  // Also puts together the whole story. Maybe break this up into two
-  // parts.
-  let all = [];
-
-  if ( keys_to_ignore.includes( name )) { return all; }
-  if ( ignore_anywhere_default.includes( name )) { return all; }  // logging everything was annoying
-
-  let var_name = name;
-  let val_type = typeof value;
-
-  if ( Array.isArray( value )) {
-    all = parse.array({ name: var_name, value: value, checked: '', }, debug);
-
-  } else if ( value === null ) {
-    all = parse.null({ name: var_name, value: value, checked: '', }, debug);
-
-  } else if ( value !== null && parse[ val_type ] ) {
-    all = parse[ val_type ]({ name: var_name, value: value, checked: '', }, debug);
-  
-  } else {
-    console.warn( 'Sorry, something has not been accounted for. You will have to do some editing to get this to work.', var_name, typeof value);
-  }
+parse.start = function ({ name, value, checked }, debug) {
+  // Starts things off and builds the story.
+  let all = parse.filter({ name, value, checked }, debug);
 
   // Get unique rows that are strings (removing `undefined`)
   let story = [];
@@ -179,7 +157,34 @@ parse.all = function ({name, value, checked }, debug) {
   }
 
   return story;
-};  // End parse.all()
+};  // End parse.start()
+
+
+parse.filter = function ({ name, value, checked }, debug) {
+  // Filters - makes sure each item in processed by the
+  // right function based on its type.
+  if ( keys_to_ignore.includes( name )) { return []; }
+  if ( ignore_anywhere_default.includes( name )) { return []; }  // logging everything was annoying
+
+  let var_name = name;
+  let val_type = typeof value;
+  let rows = [];
+
+  if ( Array.isArray( value )) {
+    rows = parse.array({ name: var_name, value: value, checked: '', }, debug);
+
+  } else if ( value === null ) {
+    rows = parse.null({ name: var_name, value: value, checked: '', }, debug);
+
+  } else if ( value !== null && parse[ val_type ] ) {
+    rows = parse[ val_type ]({ name: var_name, value: value, checked: '', }, debug);
+  
+  } else {
+    console.warn( 'Sorry, something has not been accounted for. You will have to do some editing to get this to work.', var_name, typeof value);
+  }
+
+  return rows;
+};  // End parse.filter()
 
 
 parse.elements = function ({ name, value, checked }, debug) {
@@ -192,8 +197,10 @@ parse.elements = function ({ name, value, checked }, debug) {
     let any_true = false;
     for ( let element_key in value ) {
       let one_row;
+
+      // checkbox objects are key/bool pairs. Do special checks and
+      // get story row right here. (Can this sometimes be buttons?)
       if ( typeof value[ element_key ] === 'boolean' ) {
-        // Can this sometimes be buttons?
         were_checkboxes = true;
         if ( value[ element_key ] === true ) {
           any_true = true;
@@ -208,9 +215,8 @@ parse.elements = function ({ name, value, checked }, debug) {
         rows.push( one_row );
       } else {
 
-        // Not sure when this would happen
-        rows = rows.concat(parse.all({ name, value, checked }, debug));
-
+        // Dig deeper. Not sure when this would happen
+        rows = rows.concat(parse.filter({ name, value, checked }, debug));
       }
     }  // ends for choice in value
 
@@ -222,7 +228,7 @@ parse.elements = function ({ name, value, checked }, debug) {
       }
     }
   } else {
-    rows = rows.concat( parse.all({ name, value, checked }, debug) );
+    rows = rows.concat( parse.filter({ name, value, checked }, debug) );
   }
 
   return rows;
@@ -250,13 +256,12 @@ parse.object = function ({ name, value, checked }, debug) {
     let new_value = new_obj[ key ];
     let val_type = typeof new_value;
     // Send the contents of the object to be filtered
-    let rows = parse.all({ name: var_name, value: new_value, checked: '', }, debug);
+    let rows = parse.filter({ name: var_name, value: new_value, checked: '', }, debug);
 
     the_rest = the_rest.concat( rows );
   }  // ends for key in new_obj
 
   return the_rest;
-  // return parse.all({ name, value: new_obj, checked: '', }, debug);
 };  // Ends parse.object()
 
 
@@ -266,8 +271,9 @@ parse.array = function ({ name, value, checked }, debug ) {
   for (let index = 0; index < value.length; index++) {
     // Add to the name and send it to loop through again
     let var_name = `${ name }[${ index }]`;
-    let  item = value[ index ];
-    rows = parse.all({ name: var_name, value: item, checked: '', }, debug);
+    let item = value[ index ];
+    let new_rows = parse.filter({ name: var_name, value: item, checked: '', }, debug);
+    rows = rows.concat( new_rows );
   }
   return rows;
 };  // Ends parse.array()
@@ -298,7 +304,7 @@ parse.boolean = function ({ name, value, checked }, debug) {
 
 
 let get_story = function( vars ) {
-  return parse.all({
+  return parse.start({
     name: '',
     value: vars,
   });
