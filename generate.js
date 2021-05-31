@@ -149,7 +149,7 @@ let parse = {};
 parse.start = function ({ name, value, checked }, debug) {
   // Starts things off and builds the story.
   let all = parse.filter({ name, value, checked }, debug);
-  debug = false;
+  
   // Get unique rows that are strings (removing `undefined`)
   let story = [];
   for ( let row of all ) {
@@ -171,11 +171,6 @@ parse.filter = function ({ name, value, checked }, debug) {
   let var_name = name;
   let val_type = typeof value;
   let rows = [];
-
-  if ( name === 'trial_court' ) {
-    debug = true;
-    console.log( name );
-  } else { debug = false; }
 
   if ( Array.isArray( value )) {
     rows = parse.array({ name: var_name, value: value, checked: '', }, debug);
@@ -256,7 +251,6 @@ parse.object = function ({ name, value, checked }, debug) {
     rows = parse.object_choice({ name, value, checked }, debug);
   }
 
-  if (debug) {console.log( `obj ${ name }` );}
   // `elements` can be (are always?) checkbox items
   let { elements, ...new_obj } = value;
   if ( elements ) {
