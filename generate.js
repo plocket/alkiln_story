@@ -4,6 +4,8 @@
 // Cut down on unneeded data
 // ============================
 let keys_to_ignore = [
+  // === AssemblyLine-specific keywords to skip
+  'all_courts',
   // Less sure these are safe to ignore
   'ask_number',
   'ask_object_type',
@@ -15,8 +17,8 @@ let keys_to_ignore = [
 // Ignore text we should ignore wherever it appears, even in a fully formed variable name
 let ignore_anywhere_default = [
   // === AssemblyLine-specific keywords to skip
-  'all_courts',
-  '_attachment[i]',
+  '_attachment',
+  '_bundle',
   'court_emails',
   'download_titles',
   'form_approved_for_email_filing',
@@ -147,7 +149,7 @@ let parse = {};
 parse.start = function ({ name, value, checked }, debug) {
   // Starts things off and builds the story.
   let all = parse.filter({ name, value, checked }, debug);
-
+  debug = false;
   // Get unique rows that are strings (removing `undefined`)
   let story = [];
   for ( let row of all ) {
@@ -169,6 +171,11 @@ parse.filter = function ({ name, value, checked }, debug) {
   let var_name = name;
   let val_type = typeof value;
   let rows = [];
+
+  if ( name === 'trial_court' ) {
+    debug = true;
+    console.log( name );
+  } else { debug = false; }
 
   if ( Array.isArray( value )) {
     rows = parse.array({ name: var_name, value: value, checked: '', }, debug);
@@ -236,9 +243,20 @@ parse.elements = function ({ name, value, checked }, debug) {
 
 
 parse.object = function ({ name, value, checked }, debug) {
-  if ( value.instanceName ) { name = value.instanceName; }
   let rows = [];
 
+  // Special case for obj with a different instanceName. May represent a
+  // choice/dropdown created with `code:` and a list of objects
+  // so one of those objects is the value of this variable.
+  // Note: In the end, this may not be enough. It may be that some
+  // of these situations cause their instanceName to need its values
+  // set as well and we may need to loop using the instanceName as
+  // the name itself. We'll have to keep an eye out for it.
+  if ( value.instanceName && name !== value.instanceName ) {
+    rows = parse.object_choice({ name, value, checked }, debug);
+  }
+
+  if (debug) {console.log( `obj ${ name }` );}
   // `elements` can be (are always?) checkbox items
   let { elements, ...new_obj } = value;
   if ( elements ) {
@@ -263,6 +281,19 @@ parse.object = function ({ name, value, checked }, debug) {
 
   return rows;
 };  // Ends parse.object()
+
+
+parse.object_choice = function ({ name, value, checked }, debug ) {
+  // May represent a choice/dropdown created with `code:` and
+  // a list of objects so one of those objects is the value of
+  // this variable. The instanceName is what will be listed as
+  // `value` of the HTML element.
+  return [ get_story_row({
+    name: name,
+    value: value.instanceName,
+    checked: true,
+  }, debug )];
+}
 
 
 parse.array = function ({ name, value, checked }, debug ) {
