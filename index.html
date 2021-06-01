@@ -17,7 +17,7 @@
     }
 
     p {
-      margin: 0 0 0.3em 0;
+      margin: 0 0 0.7em;
     }
 
     button {
@@ -104,6 +104,10 @@
       padding: 0;
     }
 
+    #resources p {
+      margin: 0 0 0.3em;
+    }
+
     #feature, #scenario {
       background-color: #f3fff6;
       font-family: monospace;
@@ -176,6 +180,7 @@
 
     button {
       color: black;
+      text-align: left;
     }
     button a {
       text-decoration: none;
@@ -186,7 +191,7 @@
       color: gray;
     }
 
-    .download_icon { text-decoration: underline;  }
+    .download_icon, .upload_icon { text-decoration: underline;  }
 
   </style>
 </head>
@@ -203,7 +208,8 @@
   <section id="data_container">
     <p id="da_data_warning" class="ok message">Something is wrong with the data. See error below.</p>
       <!-- and/or try <a href='https://javascriptvalidator.net/'>a js validator</a>.</p> -->
-    <p>Paste your docassemble variable data into this text box:</p>
+    <p><label for="var_data_upload"><span class="upload_icon">&#8593;</span> Upload your JSON variable file:</label> <input id="var_data_upload" name="var_data_upload" type="file"/></p>
+    <p>Or paste your docassemble 'show variables and values' data into the textarea:</p>
     <textarea id="da_data" placeholder="Paste data here" rows="4"></textarea>
     <div class="error_output"></div>
   </section>
@@ -213,20 +219,22 @@
 
     <!-- <button class="toggler" for="options_container">▼ Edit test options</button> -->
 
-    <button class="toggler" for="ignore_container">▼ Edit ignored variables</button>
+    <button class="toggler" for="ignore_container">▼ Edit excluded text</button>
     <div id="ignore_container" class="togglee collapsed">
 
-      <p>Automatically ignored:</p>
-      <p id="auto_ignored_keys_only"></p>
-      <br>
+      <div>Automatically excluded variable names:</div>
+      <code id="auto_ignored_keys_only"></code>
+      <br><br>
 
       <!-- Why offer them this fine-grained detail till we know it's needed? -->
       <!-- <div id="ignore_keys"></div> -->
       
       <div id="ignore_anywhere_container" display="none">
         <p id="ignore_warning" class="ok message">Something is wrong with the list. Will use default values. See bottom.</p>
-        <p>Add or edit words to ignore in the keys of variables:</p>
-        <button id="reset_ignore">ⓧ Reset</button> 
+        <p>Customize the list of text that will cause a row in the table to be excluded. The text might be anywhere in the variable name or in the value.</p>
+        <p><label for="ignore_upload"><span class="upload_icon">&#8593;</span> Upload a custom JSON list:</label> <input id="ignore_upload" name="ignore_upload" type="file"/></p>
+        <p>Or edit the textarea below</p>
+        <button id="reset_ignore">ⓧ Reset excluded text</button> 
         <textarea id="ignore_anywhere" name="" cols="" rows=""></textarea> 
       </div>
     <div class="error_output"></div>
@@ -264,7 +272,6 @@
       <input type="number" name="num_signatures" id="num_signatures" value="0">  
     </div> -->
   </section>
-  
 
   <section id="output_container">
     <div>Once the test has been generated, you can download it as a <code>.feature</code> file or tap 'copy' and paste one test into your <code>.feature</code> file</div>
