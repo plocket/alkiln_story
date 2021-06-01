@@ -425,7 +425,7 @@ let update_output = function () {
 
     // Add early part of test
     let test_length = `slow`;
-    if ( story.length <= 45 ) { test_length = `fast`; }
+    if ( story.length <= 100 ) { test_length = `fast`; }
     output += ` @${ test_length }`;
 
   // If no input or erroring input
@@ -449,6 +449,10 @@ let update_output = function () {
   // }
 
   scenario.innerText = output;
+
+  let file_contents = `Feature: Description of broad purpose for all scenarios in here${ output }`;
+  let download = document.getElementById(`download_test_file`);
+  download.href = `data:text/plain, ${ encodeURIComponent( file_contents )}`;
 };
 
 tableInput.addEventListener( 'input', update_output );  // ends text area event listener
@@ -546,9 +550,3 @@ copy_scenario_button.addEventListener( 'click', ( elem ) => {
   navigator.clipboard.writeText( output );
 });
 
-
-let copy_feature_button = document.getElementById( 'copy_feature' );
-let feature = document.getElementById( 'feature' );
-copy_feature_button.addEventListener( 'click', ( elem ) => {
-  navigator.clipboard.writeText( `${ feature.innerText }\n\n` );
-});
