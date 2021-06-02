@@ -29,7 +29,7 @@
       background-color: #57c372;
       max-width: 600px;
       margin: 0 auto;
-      border-radius: 5px;
+      border-radius: 2px;
       position: relative;
       z-index: 1;
     }
@@ -45,7 +45,7 @@
       right: 0;
       bottom: 0;
       /* border: 2px solid #000000; */
-      border-radius: 5px;
+      border-radius: 2px;
     }
 
     header:after {
@@ -58,7 +58,7 @@
       right: .5em;
       bottom: .5em;
       /* border: 2px solid #000000; */
-      border-radius: 5px;
+      border-radius: 2px;
     }
 
 
@@ -82,7 +82,7 @@
       position: relative;
       background-color: #daeedf;
       border: 1px solid gray;
-      border-radius: 5px;
+      border-radius: 2px;
       margin: 0 auto;
       margin-bottom: 1em;
       padding: .5em 1em;
@@ -112,12 +112,12 @@
       background-color: #f3fff6;
       font-family: monospace;
       border: 1px solid gray;
-      border-radius: 5px;
+      border-radius: 2px;
       padding: 0.5em;
       margin-bottom: 1em;
     }
 
-    #auto_ignored_keys_only {
+    #auto_excluded_keys_only {
       font-family: monospace;
     }
 
@@ -223,27 +223,27 @@
     <div id="ignore_container" class="togglee collapsed">
 
       <div>Automatically excluded variable names:</div>
-      <code id="auto_ignored_keys_only"></code>
+      <code id="auto_excluded_keys_only"></code>
       <br><br>
 
       <!-- Why offer them this fine-grained detail till we know it's needed? -->
       <!-- <div id="ignore_keys"></div> -->
       
       <div id="ignore_anywhere_container" display="none">
-        <p id="ignore_warning" class="ok message">Something is wrong with the list. Will use default values. See bottom.</p>
         <p>Customize the list of text that will cause a row in the table to be excluded. The text might be anywhere in the variable name or in the value.</p>
-        <p><label for="ignore_upload"><span class="upload_icon">&#8593;</span> Upload a custom JSON list:</label> <input id="ignore_upload" name="ignore_upload" type="file"/></p>
+        <p><label for="exclude_upload"><span class="upload_icon">&#8593;</span> Upload a custom JSON list:</label> <input id="exclude_upload" name="exclude_upload" type="file"/></p>
         <p>Or edit the textarea below</p>
-        <button id="reset_ignore">ⓧ Reset excluded text</button> 
+        <button id="reset_ignore">ⓧ Reset excluded text</button>
+        <div class="error_output"></div>
         <textarea id="ignore_anywhere" name="" cols="" rows=""></textarea> 
       </div>
-    <div class="error_output"></div>
     </div>
   </section>
 
   <section id="custom_values_container">
 
     <div>
+      <p>Remember you will probably need to edit the code after you've generated it here.</p>
       <div class="one_line_field_container">
           <label for="scenario_description">This scenario is special because:</label>
           <input id="scenario_description" type="text" name="scenario_description" placeholder="User has special circumstance">
@@ -274,9 +274,9 @@
   </section>
 
   <section id="output_container">
-    <div>Once the test has been generated, you can download it as a <code>.feature</code> file or tap 'copy' and paste one test into your <code>.feature</code> file</div>
+    <div>Once the test has been generated, you will need to edit it. You can download it as a full <code>.feature</code> file or tap 'copy' and paste one test into your own <code>.feature</code> file.</div>
     <button><a id="download_test_file" download="tests.feature"><span class="download_icon">&#8681;</span> Download generated test</a></button>
-    <button id="copy_scenario">Copy</button>
+    <button id="copy_scenario">Copy the code below</button>
     <div id="scenario"></div>
   </section>
 

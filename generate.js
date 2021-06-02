@@ -348,7 +348,7 @@ let get_story = function( vars ) {
 
 
 // ============================
-// Prepping start (and default) text
+// Output - Prepping start (and default) text
 // ============================
 let scenario = document.getElementById( 'scenario' );
 let output = '';
@@ -397,12 +397,24 @@ let get_test_start = function () {
   return test_start;
 }
 
+let update_var_data_error = function ( err_msg ) {
+  // Either make the error visible or hide it, depending on what's needed
+  // Needs a better name or something
+  if ( err_msg !== '' ) {
+    console.error( err_msg );
+    da_warning.classList.add('error');
+  } else {
+    da_warning.classList.remove('error');
+  }
+  data_error.innerText = err_msg;
+}
+
 scenario.innerText = get_test_start();
 output = `\n\n${ get_test_start() }`;
 
 
 // ============================
-// Getting and showing the result
+// Output - Getting and showing the result
 // ============================
 let da_warning = document.getElementById( 'da_data_warning' );
 let tableInput = document.getElementById( 'da_data' );
@@ -417,8 +429,7 @@ let update_output = function () {
   try {
     data = JSON.parse( tableInput.value );
     vars = data.variables;
-    da_warning.classList.remove('error');
-    data_error.innerText = '';
+    update_var_data_error('');
 
     // Get data
     story = story.concat( get_story( vars ));
@@ -429,11 +440,9 @@ let update_output = function () {
     output += ` @${ test_length }`;
 
   // If no input or erroring input
-  } catch ( err) {
+  } catch ( error) {
     if ( tableInput.value !== '' ) {
-      console.warn( err );
-      da_warning.classList.add('error');
-      data_error.innerText = err;
+      update_var_data_error( error );
     }
   }
   
@@ -450,9 +459,9 @@ let update_output = function () {
 
   scenario.innerText = output;
 
-  let file_contents = `Feature: Description of broad purpose for all scenarios in here${ output }`;
+  let download_contents = `Feature: Description of broad purpose for all scenarios in here${ output }`;
   let download = document.getElementById(`download_test_file`);
-  download.href = `data:text/plain, ${ encodeURIComponent( file_contents )}`;
+  download.href = `data:text/plain, ${ encodeURIComponent( download_contents )}`;
 };
 
 tableInput.addEventListener( 'input', update_output );  // ends text area event listener
@@ -460,8 +469,9 @@ tableInput.addEventListener( 'input', update_output );  // ends text area event 
 
 
 // ============================
-// Adjusting visibility
+// Adjusting size of elements based on their contents
 // ============================
+// At the moment, only `ignore_anywhere` is being adjusted
 let fit_to_content_ids = ['ignore_anywhere'];
 
 let fit_textarea_to_content = function ( node ) {
@@ -472,22 +482,26 @@ let fit_textarea_to_content = function ( node ) {
 }
 
 
+// TODO: Rearrange the sections to be closer to their values/defaults
+// TODO: Refactor name to 'exclude' instead of 'ignore'
 // ============================
-// Extra options
+// Excluding rows based on their contents
 // ============================
-// Show keys_to_ignore. THAT VALUE STAYS THE SAME ALWAYS. It's hard-coded in here
-let keys_to_ignore_node = document.getElementById( 'auto_ignored_keys_only' );
-keys_to_ignore_node.innerText = JSON.stringify( keys_to_ignore );
+// keys_to_ignore tests only the variable names, not the whole contents of the row.
+// THIS VALUE STAYS THE SAME ALWAYS. It's hard-coded in here.
+// Show this list to the user so they might better understand what's going on.
+let keys_to_exclude_node = document.getElementById( 'auto_excluded_keys_only' );
+keys_to_exclude_node.innerText = JSON.stringify( keys_to_ignore );
 
+// 
 // ignore_anywhere CAN change. Show current value and allow changes.
-let ignore_anywhere_node = document.getElementById( 'ignore_anywhere' );
+let exclude_anywhere_node = document.getElementById( 'ignore_anywhere' );
 let ignore_anywhere_default_alphabetical = ignore_anywhere_default.sort(function (a, b) {
     if (a > b) { return 1; }
     if (b > a) { return -1; }
     return 0;
 });
 let ignore_anywhere = ignore_anywhere_default_alphabetical;
-let ignore_warning = document.getElementById( 'ignore_warning' );
 let ignore_error = document.querySelector( 'section#extra_options_container .error_output' );
 
 
@@ -495,36 +509,77 @@ let ignore_error = document.querySelector( 'section#extra_options_container .err
 document.body.addEventListener( 'input', function( event ) {
   fit_textarea_to_content( event.target );
   if ( event.target.id === 'ignore_anywhere' ) {
-    update_ignore_anywhere_variable();
+    update_exclude_anywhere( event.target.value );
     update_output();
   }
 });  // ends listen for input
 
-let update_ignore_anywhere_variable = function () {
-  if ( ignore_anywhere_node.value ) {
+let update_custom_exclusion_error = function ( err_msg ) {
+  // Either make the error visible or hide it, depending on what's needed
+  // Needs a better name or something too
+  if ( err_msg !== '' ) {
+    console.error( err_msg );
+    ignore_anywhere = ignore_anywhere_default_alphabetical;  // reset to default
+  }
+  ignore_error.innerText = err_msg;
+}
+
+let update_exclude_anywhere = function ( new_value ) {
+  // Set the value for ignore_anywhere and make sure the
+  // value is in the textarea. Handle errors.
+  if ( new_value ) {
     try {
-      ignore_anywhere = JSON.parse( ignore_anywhere_node.value );
-      ignore_warning.classList.remove('error');
-      ignore_error.innerText = '';
-    } catch ( err) {
-      console.warn( err );
-      ignore_warning.classList.add('error');
-      ignore_error.innerText = err;
-      ignore_anywhere = ignore_anywhere_default_alphabetical;  // use default
+      let maybe_exclusion_list = new_value;
+      if ( typeof new_value === `string` ) { maybe_exclusion_list = JSON.parse( new_value ); }
+      if ( !Array.isArray( maybe_exclusion_list )) {
+        let error = `Error: The data is not a JSON list of strings. This tool can only use a list of strings to exclude rows in the story table.`
+        update_custom_exclusion_error( error );
+        return;
+      }
+      ignore_anywhere = maybe_exclusion_list;
+      update_custom_exclusion_error('');
+    } catch ( error ) {
+      update_custom_exclusion_error( error );
     }
-  } else if ( ignore_anywhere_node.value === '' ) {
+  } else if ( new_value === '' ) {
+    update_custom_exclusion_error('');
     ignore_anywhere = [];
   }
+
+  exclude_anywhere_node.value = JSON.stringify( ignore_anywhere, null, 2 );
+  fit_textarea_to_content( exclude_anywhere_node );
 }
+
+let exclude_uploader = document.getElementById(`exclude_upload`);
+exclude_uploader.addEventListener( 'change', function () {
+  // Allow uploading JSON list to ignore specific variables
+  let reader = createReader();
+  if ( !reader ) { return; }
+
+  if ( exclude_uploader.files && exclude_uploader.files[0] ) {
+    reader.onload = function() {
+      try {
+        // Get the data
+        let custom_exclusion_json = JSON.parse( reader.result );
+        custom_exclude_str = JSON.stringify( custom_exclusion_json, null, 2 );
+        update_exclude_anywhere( custom_exclude_str );
+        // Build the new story
+        update_output();
+      } catch ( error ) {
+        update_custom_exclusion_error( `Could not load "${ exclude_uploader.files[0].name }". ${ error }` );
+      }
+    };
+    reader.readAsText( exclude_uploader.files[0] );
+  }
+
+});
 
 let reset_ignore_anywhere = function () {
   // Ignore text we should ignore wherever it appears, even in a fully formed variable name
-  let ignore_node_initial_text = JSON.stringify( ignore_anywhere_default_alphabetical, null, 2 );
-  ignore_anywhere_node.value = ignore_node_initial_text;
-  fit_textarea_to_content( ignore_anywhere_node );
-  update_ignore_anywhere_variable();
+  update_exclude_anywhere( ignore_anywhere_default_alphabetical );
   update_output();
 };
+// 'Reset' it at the start
 reset_ignore_anywhere();
 
 // 'click' listeners
@@ -558,7 +613,6 @@ document.body.addEventListener( 'input', update_output );
 // https://stackoverflow.com/a/13709663/14144258
 // https://stackoverflow.com/a/13709663/14144258
 let vars_uploader = document.getElementById(`var_data_upload`);
-let ignore_uploader = document.getElementById(`ignore_upload`);
 
 
 let createReader = function () {
@@ -578,40 +632,18 @@ vars_uploader.addEventListener( 'change', function () {
 
   if ( vars_uploader.files && vars_uploader.files[0] ) {
     reader.onload = function() {
-      // Show the textarea value in the DOM
-      let content = JSON.parse( reader.result );
-      tableInput.value = JSON.stringify( content, null, 2 );
-      // Build the new story
-      update_output(); 
+      try {
+        // Show the textarea value in the DOM
+        let custom_exclusion_json = JSON.parse( reader.result );
+        tableInput.value = JSON.stringify( custom_exclusion_json, null, 2 );
+        // Build the new story
+        update_output();
+        update_var_data_error( '' );
+      } catch ( error ) {
+        update_var_data_error( `Could not load "${ vars_uploader.files[0].name }". ${ error }` );
+      }
     };
     reader.readAsText( vars_uploader.files[0] );
-  }
-
-});
-
-let file = null;
-ignore_uploader.addEventListener( 'change', function () {
-  // Allow uploading JSON list to ignore specific variables
-  let reader = createReader();
-  if ( !reader ) { return; }
-
-  if ( ignore_uploader.files && ignore_uploader.files[0] ) {
-    file = ignore_uploader.files[0];
-    reader.onload = function() {
-      // Show the textarea value in the DOM
-      let custom_ignore_json = JSON.parse( reader.result );
-      if ( !Array.isArray( custom_ignore_json ) ) {
-        console.error(`That custom exclude JSON is not a list. This tool can only use a list of strings to exclude rows in the story table.`);
-        return;
-      }
-      ignore_anywhere_node.value = JSON.stringify( custom_ignore_json, null, 2 );
-      // Update the size of the textarea and update the code values
-      fit_textarea_to_content( ignore_anywhere_node );
-      update_ignore_anywhere_variable();
-      // Build the new story
-      update_output(); 
-    };
-    reader.readAsText( ignore_uploader.files[0] );
   }
 
 });
