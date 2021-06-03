@@ -502,6 +502,7 @@ let ignore_anywhere_default_alphabetical = ignore_anywhere_default.sort(function
     return 0;
 });
 let ignore_anywhere = ignore_anywhere_default_alphabetical;
+exclude_anywhere_node.value = JSON.stringify( ignore_anywhere, null, 2 );
 let ignore_error = document.querySelector( 'section#extra_options_container .error_output' );
 
 
@@ -517,36 +518,33 @@ document.body.addEventListener( 'input', function( event ) {
 let update_custom_exclusion_error = function ( err_msg ) {
   // Either make the error visible or hide it, depending on what's needed
   // Needs a better name or something too
-  if ( err_msg !== '' ) {
-    console.error( err_msg );
-    ignore_anywhere = ignore_anywhere_default_alphabetical;  // reset to default
-  }
+  if ( err_msg !== '' ) { console.error( err_msg ); }
   ignore_error.innerText = err_msg;
 }
 
 let update_exclude_anywhere = function ( new_value ) {
-  // Set the value for ignore_anywhere and make sure the
-  // value is in the textarea. Handle errors.
+  // Set the value for ignore_anywhere and size of textarea. Handle errors.
+  // Do not change contents of textarea or user will not be able to edit it.
   if ( new_value ) {
     try {
       let maybe_exclusion_list = new_value;
       if ( typeof new_value === `string` ) { maybe_exclusion_list = JSON.parse( new_value ); }
       if ( !Array.isArray( maybe_exclusion_list )) {
+        // Does not yet test that every item is a string
         let error = `Error: The data is not a JSON list of strings. This tool can only use a list of strings to exclude rows in the story table.`
         update_custom_exclusion_error( error );
-        return;
+      } else {
+        ignore_anywhere = maybe_exclusion_list;
+        update_custom_exclusion_error('');
       }
-      ignore_anywhere = maybe_exclusion_list;
-      update_custom_exclusion_error('');
     } catch ( error ) {
       update_custom_exclusion_error( error );
     }
-  } else if ( new_value === '' ) {
+  } else {
     update_custom_exclusion_error('');
     ignore_anywhere = [];
   }
 
-  exclude_anywhere_node.value = JSON.stringify( ignore_anywhere, null, 2 );
   fit_textarea_to_content( exclude_anywhere_node );
 }
 
@@ -561,8 +559,8 @@ exclude_uploader.addEventListener( 'change', function () {
       try {
         // Get the data
         let custom_exclusion_json = JSON.parse( reader.result );
-        custom_exclude_str = JSON.stringify( custom_exclusion_json, null, 2 );
-        update_exclude_anywhere( custom_exclude_str );
+        exclude_anywhere_node.value = JSON.stringify( custom_exclusion_json, null, 2 );
+        update_exclude_anywhere( custom_exclusion_json );
         // Build the new story
         update_output();
       } catch ( error ) {
@@ -577,6 +575,7 @@ exclude_uploader.addEventListener( 'change', function () {
 
 let reset_ignore_anywhere = function () {
   // Ignore text we should ignore wherever it appears, even in a fully formed variable name
+  exclude_anywhere_node.value = JSON.stringify( ignore_anywhere_default_alphabetical, null, 2 );
   update_exclude_anywhere( ignore_anywhere_default_alphabetical );
   update_output();
 };
