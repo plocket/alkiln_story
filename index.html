@@ -174,6 +174,20 @@
 
     #ignore_anywhere_container { position: relative; }
 
+    button {
+      color: black;
+    }
+    button a {
+      text-decoration: none;
+      color: inherit;
+    }
+    button[disabled] {
+      pointer-events: none;
+      color: gray;
+    }
+
+    .download_icon { text-decoration: underline;  }
+
   </style>
 </head>
 <body>
@@ -183,7 +197,7 @@
 
   <section id="resources">
     <p><img src="noun_Book_3716540.svg" class="icon small"><span>&nbsp;&nbsp;</span><a href="https://docs.google.com/document/d/1hkNr78mrU3Ha98tPUL4OKWi3eNnt-1Sba7L8470u06g/edit">Documentation for testing library</a></p>
-    <p><img src="noun_Error_3671601.svg" class="icon small">&nbsp;&nbsp;<span>Error? </span><a href="https://jsonlint.com/?code=">Use JSON validator</a></p>  
+    <p><img src="noun_Error_3671601.svg" class="icon small">&nbsp;&nbsp;<span>Error? </span><a href="https://jsonlint.com/?code=">Use JSON validator on your JSON code</a></p>  
   </section>
 
   <section id="data_container">
@@ -253,11 +267,8 @@
   
 
   <section id="output_container">
-    <p>If you're starting with a blank <code>.feature</code> file, paste this into your file:</p>
-    <button id="copy_feature">Copy</button>
-    <div id="feature">Feature: Description of broad purpose for all scenarios in here</div>
-
-    <div>Once the test has been generated, tap 'copy' and paste it into your <code>.feature</code> file</div>
+    <div>Once the test has been generated, you can download it as a <code>.feature</code> file or tap 'copy' and paste one test into your <code>.feature</code> file</div>
+    <button><a id="download_test_file" download="tests.feature"><span class="download_icon">&#8681;</span> Download generated test</a></button>
     <button id="copy_scenario">Copy</button>
     <div id="scenario"></div>
   </section>
