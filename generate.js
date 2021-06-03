@@ -400,12 +400,7 @@ let get_test_start = function () {
 let update_var_data_error = function ( err_msg ) {
   // Either make the error visible or hide it, depending on what's needed
   // Needs a better name or something
-  if ( err_msg !== '' ) {
-    console.error( err_msg );
-    da_warning.classList.add('error');
-  } else {
-    da_warning.classList.remove('error');
-  }
+  if ( err_msg !== '' ) { console.error( err_msg ); }
   data_error.innerText = err_msg;
 }
 
