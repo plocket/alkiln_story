@@ -568,6 +568,7 @@ exclude_uploader.addEventListener( 'change', function () {
       } catch ( error ) {
         update_custom_exclusion_error( `Could not load "${ exclude_uploader.files[0].name }". ${ error }` );
       }
+      exclude_uploader.value = "";
     };
     reader.readAsText( exclude_uploader.files[0] );
   }
@@ -642,6 +643,7 @@ vars_uploader.addEventListener( 'change', function () {
       } catch ( error ) {
         update_var_data_error( `Could not load "${ vars_uploader.files[0].name }". ${ error }` );
       }
+      vars_uploader.value = "";
     };
     reader.readAsText( vars_uploader.files[0] );
   }
