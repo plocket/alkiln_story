@@ -33,7 +33,6 @@ let ignore_anywhere_default = [
   'speak_text',
   'started_on_phone',
   'user_has_saved_answers',
-  '.location',
   'github_repo_name',
   'allow_cron',
   'allowed_courts',
