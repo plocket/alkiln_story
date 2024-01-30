@@ -20,7 +20,6 @@ Q2.5: Followup to Q2 - what if the quotes are meant to be there?
 A2.5: ~Don't do that?~ nvm, taking care of that in test-generating code.
 */
 
-
 // ============================
 // Building the table
 // ============================
@@ -301,11 +300,13 @@ let output = '';
 //   return rows;
 // }
 
-let get_YAML_file_name = function () {
+let get_YAML_file_name = function ({ data }) {
   let node = document.getElementById( 'yaml_file_name' );
-  let name = 'name_of_yaml_file';
+  // Example data.i filename: docassemble.playground12ALTestingTestMain:all_tests.yml
+  let name = (data && data.i && data.i.replace( /.+:/, '' )) || 'your_filename.yml';
+  console.log(name)
   if ( node && node.value && node.value !== '' ) {
-    name = node.value.replace( /\.yml$/, '' );
+    name = node.value;
   }
   return name;
 }
@@ -328,9 +329,10 @@ let get_scenario_description = function () {
   return description;
 }
 
-let get_test_start = function () {
+let get_test_start = function ({ data }) {
+  data = data || {};
   let test_start = `\nScenario: ${ get_scenario_description() }`;
-  test_start += `\n  Given I start the interview at "${ get_YAML_file_name() }"`;
+  test_start += `\n  Given I start the interview at "${ get_YAML_file_name({ data: {} }) }"`;
   test_start += `\n  And the user gets to "${ get_question_id() }" with this data:`;
   test_start += `\n    | var | value | trigger |`;
   return test_start;
@@ -343,8 +345,8 @@ let update_var_data_error = function ( err_msg ) {
   data_error.innerText = err_msg;
 }
 
-scenario.innerText = get_test_start();
-output = `\n\n${ get_test_start() }`;
+scenario.innerText = get_test_start({ data: {} });
+output = `\n\n${ get_test_start({ data: {} }) }`;
 
 
 // ============================
@@ -358,12 +360,15 @@ let update_output = function () {
   output = '\n\n@generated';
   let story = [];
 
-  let data = null;
+  let data = {};
   let vars = null;
   try {
     data = JSON.parse( tableInput.value );
     vars = data.variables;
     update_var_data_error('');
+
+    let filename = get_YAML_file_name({ data });
+    document.getElementById('yaml_file_name').value = filename;
 
     // Get data
     story = story.concat( get_story( vars ));
@@ -380,7 +385,7 @@ let update_output = function () {
     }
   }
   
-  output += get_test_start();
+  output += get_test_start({ data });
   // Add other rows if they exist
   for ( let row of story ) {
     output += `\n    ${ row }`;
