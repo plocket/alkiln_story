@@ -1,0 +1,189 @@
+
+* {
+  width: 100%;
+  box-sizing: border-box;
+  margin: .2em 0;
+}
+
+body {
+  padding: .3em 1em;
+  font-family: Helvetica;
+  text-align: center;
+}
+
+p {
+  margin: 0 0 0.7em;
+}
+
+button {
+  width: 15em;
+  height: 2.5em;
+}
+
+header {
+  background-color: #57c372;
+  max-width: 600px;
+  margin: 0 auto;
+  border-radius: 2px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Border outlines interfere with icon */
+header:before {
+  background-color: #57c372;
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* border: 2px solid #000000; */
+  border-radius: 2px;
+}
+
+header:after {
+  background-color: #57c372;
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: .5em;
+  left: .5em;
+  right: .5em;
+  bottom: .5em;
+  /* border: 2px solid #000000; */
+  border-radius: 2px;
+}
+
+
+header, header * {
+  width: unset;
+  position: relative;
+}
+
+header h2 {
+  padding: 1em;
+}
+
+header .icon {
+  height: 6em;
+  position: absolute;
+  top: -2em;
+  right: -5em;
+}
+
+section {
+  position: relative;
+  background-color: #daeedf;
+  border: 1px solid gray;
+  border-radius: 2px;
+  margin: 0 auto;
+  margin-bottom: 1em;
+  padding: .5em 1em;
+  max-width: 600px;
+  text-align: left;
+}
+
+.icon.small {
+  width: 1.2em;
+  display: inline;
+  position: relative;
+  top: .5em;
+  margin: 0;
+}
+
+#resources {
+  background-color: unset;
+  border: unset;
+  padding: 0;
+}
+
+#resources p {
+  margin: 0 0 0.3em;
+}
+
+#feature, #scenario {
+  background-color: #f3fff6;
+  font-family: monospace;
+  border: 1px solid gray;
+  border-radius: 2px;
+  padding: 0.5em;
+  margin-bottom: 1em;
+}
+
+#auto_excluded_keys_only {
+  font-family: monospace;
+}
+
+.togglee {
+  overflow: hidden;
+  height: 0;
+}
+
+.expanded {
+  height: fit-content;
+  transition: height 70ms ease-out;
+}
+
+.message {
+  position: absolute;
+  top: -1em;
+  left: 0;
+}
+
+.error_output {
+  color: red;
+}
+
+.ok {
+  display: none;
+}
+
+.error {
+  display: block;
+  color: red;
+}
+
+label, input {
+  display: inline-block;
+  width: fit-content;
+}
+
+.one_line_field_container {
+  width: 100%;
+  display: table;
+}
+
+#custom_values_container input {
+  width: 100%;
+  display: table-cell;
+}
+
+#custom_values_container label {
+  width: 15em;
+  display: table-cell;
+}
+
+.example {
+  margin-top: -0.2em;
+  font-size: 0.8em;
+  color: #606060;
+}
+
+#ignore_anywhere_container { position: relative; }
+
+button {
+  color: black;
+  text-align: left;
+}
+button a {
+  text-decoration: none;
+  color: inherit;
+}
+button[disabled] {
+  pointer-events: none;
+  color: gray;
+}
+
+.download_icon, .upload_icon { text-decoration: underline;  }
