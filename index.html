@@ -52,35 +52,45 @@
   <section id="custom_values_container">
 
     <div>
-      <p>Remember you will probably need to edit the code after you've generated it here.</p>
+      <p>
+        Customize the unique parts of the test file and test.<br/>
+        You <strong>must</strong> fill in all the fields.
+      </p>
 
-      <div>
-        <div class="one_line_field_container">
-            <label for="yaml_file_name">Interview YAML file name:</label>
-            <input id="yaml_file_name" type="text" name="yaml_file_name" placeholder="interview_file.yml">
+      <div class="one_line_field_container">
+        <label for="yaml_file_name">Interview YAML file name:</label>
+        <div>
+          <input id="yaml_file_name" type="text" name="yaml_file_name" placeholder="your_file.yml">
+          <div class="example">Example: <strong>file_a_motion.yml</strong></div>
         </div>
-        <div class="example">Example: <strong>file_a_motion.yml</strong></div>
       </div>
 
       <div class="one_line_field_container">
-          <label for="scenario_description">This scenario is special because:</label>
-          <input id="scenario_description" type="text" name="scenario_description" placeholder="User has special circumstance">
+        <label for="feature_description">This <strong>file</strong> is special because the user says:</label>
+        <div>
+          <input id="feature_description" type="text" name="feature_description" placeholder="I am a user">
+          <div class="example">Example: <strong>I have children</strong></div>
+        </div>
       </div>
-      <div class="example">Example: <strong>Court date has passed</strong></div>
-    </div>
 
-    <div>
       <div class="one_line_field_container">
-          <label for="question_id">Final question id:</label>
+        <label for="scenario_description">This <strong>test</strong> is special because the user says:</label>
+        <div>
+          <input id="scenario_description" type="text" name="scenario_description" placeholder="I have a name">
+          <div class="example">Example: <strong>I allow visitation</strong></div>
+        </div>
+      </div>
+
+      <div class="one_line_field_container">
+        <label for="question_id">ID of final question:</label>
+        <div>
           <input id="question_id" type="text" name="question_id" placeholder="a question id">
+          <div class="example">Example: <strong>next steps</strong></div>
+        </div>
       </div>
-      <div class="example">Example: <strong>next steps</strong></div>
+
     </div>
 
-    <!-- <div>
-      <label for="num_signatures">How many people sign?</label>
-      <input type="number" name="num_signatures" id="num_signatures" value="0">  
-    </div> -->
   </section>
 
   <section id="output_container">

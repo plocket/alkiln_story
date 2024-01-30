@@ -320,9 +320,18 @@ let get_question_id = function () {
   return id;
 }
 
+let get_feature_description = function () {
+  let node = document.getElementById( 'feature_description' );
+  let description = node.placeholder;
+  if ( node && node.value && node.value !== '' ) {
+    description = node.value;
+  }
+  return description;
+}
+
 let get_scenario_description = function () {
   let node = document.getElementById( 'scenario_description' );
-  let description = 'User has special circumstance';
+  let description = node.placeholder;
   if ( node && node.value && node.value !== '' ) {
     description = node.value;
   }
@@ -331,7 +340,9 @@ let get_scenario_description = function () {
 
 let get_test_start = function ({ data }) {
   data = data || {};
-  let test_start = `\nScenario: ${ get_scenario_description() }`;
+  let test_start = `Feature: ${ get_feature_description() || get_scenario_description() }`;
+  test_start += `\n`;
+  test_start += `\nScenario: ${ get_scenario_description() }`;
   test_start += `\n  Given I start the interview at "${ get_YAML_file_name({ data: {} }) }"`;
   test_start += `\n  And the user gets to "${ get_question_id() }" with this data:`;
   test_start += `\n    | var | value | trigger |`;
@@ -357,7 +368,6 @@ let tableInput = document.getElementById( 'da_data' );
 let data_error = document.querySelector( 'section#data_container .error_output' );
 
 let update_output = function () {
-  output = '\n\n@generated';
   let story = [];
 
   let data = {};
@@ -373,10 +383,10 @@ let update_output = function () {
     // Get data
     story = story.concat( get_story( vars ));
 
-    // Add early part of test
-    let test_length = `slow`;
-    if ( story.length <= 100 ) { test_length = `fast`; }
-    output += ` @${ test_length }`;
+    // // Add early part of test
+    // let test_length = `slow`;
+    // if ( story.length <= 100 ) { test_length = `fast`; }
+    // output += ` @${ test_length }`;
 
   // If no input or erroring input
   } catch ( error) {
@@ -385,7 +395,7 @@ let update_output = function () {
     }
   }
   
-  output += get_test_start({ data });
+  let output = get_test_start({ data });
   // Add other rows if they exist
   for ( let row of story ) {
     output += `\n    ${ row }`;
