@@ -134,7 +134,7 @@ let get_story_row = function({ name, value, }, debug=false) {
 
   row = `| ${ name } | ${ value } |  |`;
   // The below creates ascii code `194 160` in the clipboard when user uses 'Copy' button
-  // row = row.replace(/ /g, '\u00A0');  // Avoid collapsing multiple sapces (darn HTML!)
+  // row = row.replace(/ /g, ' ');  // Avoid collapsing multiple sapces (darn HTML!)
 
   return row;
 };  // End get_story_row()
@@ -411,9 +411,9 @@ let get_scenario_description = function () {
 
 let get_test_start = function () {
   let test_start = `\nScenario: ${ get_scenario_description() }`;
-  test_start += `\n\u00A0\u00A0Given I start the interview at "${ get_YAML_file_name() }"`;
-  test_start += `\n\u00A0\u00A0And the user gets to "${ get_question_id() }" with this data:`;
-  test_start += `\n\u00A0\u00A0\u00A0\u00A0| var | value | trigger |`;
+  test_start += `\n  Given I start the interview at "${ get_YAML_file_name() }"`;
+  test_start += `\n  And the user gets to "${ get_question_id() }" with this data:`;
+  test_start += `\n    | var | value | trigger |`;
   return test_start;
 }
 
@@ -464,12 +464,12 @@ let update_output = function () {
   output += get_test_start();
   // Add other rows if they exist
   for ( let row of story ) {
-    output += `\n\u00A0\u00A0\u00A0\u00A0${ row }`;
+    output += `\n    ${ row }`;
   }
   // // Add signature rows if they exist
   // let sigs = Array( get_num_signature_rows() );
   // for ( let row of sigs ) {
-  //   output += `\n\u00A0\u00A0\u00A0\u00A0|  |  | /sign |`;
+  //   output += `\n    |  |  | /sign |`;
   // }
 
   scenario.innerText = output;
