@@ -80,9 +80,19 @@ section {
   border-radius: 2px;
   margin: 0 auto;
   margin-bottom: 1em;
-  padding: .5em 1em;
+  padding: 1.2em 1em .5em 2.5em;
+/*  padding-left: 2.5rem;*/
+/*  padding-top: 1.2rem;*/
   max-width: 600px;
   text-align: left;
+}
+
+.step_number {
+  font-size: 2rem;
+  line-height: 2rem;
+  position: absolute;
+  top: 0;
+  left: .5rem;
 }
 
 .icon.small {
@@ -112,6 +122,11 @@ section {
   margin-bottom: 1em;
 }
 
+#toggle_exclude {
+  margin-top: 1em;
+  width: fit-content;
+}
+
 #auto_excluded_keys_only {
   font-family: monospace;
 }
@@ -119,11 +134,13 @@ section {
 .togglee {
   overflow: hidden;
   height: 0;
+  margin: 0;
 }
 
 .expanded {
   height: fit-content;
   transition: height 70ms ease-out;
+  margin: initial;
 }
 
 .message {
@@ -140,10 +157,10 @@ section {
   display: none;
 }
 
-.error {
+/*.error {
   display: block;
   color: red;
-}
+}*/
 
 label, input {
   display: inline-block;

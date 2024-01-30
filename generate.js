@@ -377,7 +377,7 @@ output = `\n\n${ get_test_start({ data: {} }) }`;
 // ============================
 let da_warning = document.getElementById( 'da_data_warning' );
 let tableInput = document.getElementById( 'da_data' );
-let data_error = document.querySelector( 'section#data_container .error_output' );
+let data_error = document.getElementById( 'data_error_output' );
 
 let update_output = function () {
   let story = [];
@@ -455,7 +455,7 @@ let ignore_anywhere_default_alphabetical = ignore_anywhere_in_var_name_default.s
 });
 let ignore_anywhere_in_var_name = ignore_anywhere_default_alphabetical;
 exclude_anywhere_in_var_name_node.value = JSON.stringify( ignore_anywhere_in_var_name, null, 2 );
-let ignore_error = document.querySelector( 'section#extra_options_container .error_output' );
+let ignore_error = document.getElementById( 'ignored_error_output' );
 
 
 // Listen for changes that customize the ignore_anywhere_in_var_name list

@@ -11,20 +11,29 @@
 
   <section id="resources">
     <p><img src="noun_Book_3716540.svg" class="icon small"><span>&nbsp;&nbsp;</span><a href="https://suffolklitlab.org/docassemble-AssemblyLine-documentation/docs/alkiln">Documentation for using ALKiln</a></p>
-    <p><img src="noun_Error_3671601.svg" class="icon small">&nbsp;&nbsp;<span>Error? </span><a href="https://jsonlint.com/?code=">Use JSON validator on your JSON code</a></p>  
+    <p><img src="noun_Error_3671601.svg" class="icon small">&nbsp;&nbsp;<span>Did you get an error? </span><a href="https://jsonlint.com/?code=">Use JSON validator on your JSON code</a></p>
   </section>
 
   <section id="data_container">
-    <p><label for="var_data_upload"><span class="upload_icon">&#8593;</span> Upload your JSON variable file:</label> <input id="var_data_upload" name="var_data_upload" type="file"/></p>
-    <p>Or paste your docassemble 'show variables and values' data into the textarea</p>
-    <div class="error_output"></div>
-    <textarea id="da_data" placeholder="Paste data here" rows="4"></textarea>
-  </section>
 
-  <section id="extra_options_container">
+    <span class="step_number" alt="Step 1">①</span>
+
+    <p>Choose one:</p>
+    <p>
+      <label for="var_data_upload"><span class="upload_icon">&#8593;</span> Upload your JSON variable file:</label>
+      <p>
+        <input id="var_data_upload" name="var_data_upload" type="file"/>
+      </p>
+    </p>
+    <p>
+      Or paste your docassemble 'show variables and values' data into the textarea:
+    </p>
+    <div id="data_error_output" class="error_output"></div>
+    <textarea id="da_data" placeholder="Paste data here" rows="4"></textarea>
+
     <!-- <button class="toggler" for="options_container">▼ Edit test options</button> -->
 
-    <button class="toggler" for="ignore_container">▼ Edit excluded text</button>
+    <button id="toggle_exclude" class="toggler" for="ignore_container">▼ Edit excluded text (advanced)</button>
     <div id="ignore_container" class="togglee collapsed">
 
       <!-- Why offer them this fine-grained detail till we know it's needed? -->
@@ -38,7 +47,7 @@
           <!-- <span class="close_icon">ⓧ</span> -->
           <span>Reset excluded text</span>
         </button>
-        <div class="error_output"></div>
+        <div id="ignored_error_output" class="error_output"></div>
         <textarea id="ignore_anywhere_in_var_name" name="" cols="" rows=""></textarea>
       </div>
 
@@ -51,14 +60,16 @@
 
   <section id="custom_values_container">
 
+    <span class="step_number" alt="Step 2">②</span>
+
     <div>
       <p>
-        Customize the unique parts of the test file and test.<br/>
-        You <strong>must</strong> fill in all the fields.
+        Customize the unique parts of the test file and of the test.<br/>
+        You <strong>must</strong> fill in the final question id.
       </p>
 
       <div class="one_line_field_container">
-        <label for="yaml_file_name">Interview YAML file name:</label>
+        <label for="yaml_file_name">Interview YAML file name</br>(automatically detected)</label>
         <div>
           <input id="yaml_file_name" type="text" name="yaml_file_name" placeholder="your_interview.yml">
           <div class="example">Example: <strong>file_a_motion.yml</strong></div>
@@ -66,15 +77,15 @@
       </div>
 
       <div class="one_line_field_container">
-        <label for="question_id">ID of final question:</label>
+        <label for="question_id"><strong>REQUIRED:</strong></br>ID of final question</label>
         <div>
-          <input id="question_id" type="text" name="question_id" placeholder="a question id">
-          <div class="example">Example: <strong>next steps</strong></div>
+          <input id="question_id" type="text" name="question_id" placeholder="none">
+          <div class="example">Example: <strong>download</strong></div>
         </div>
       </div>
 
       <div class="one_line_field_container">
-        <label for="new_file_name">Name of this new test file:</label>
+        <label for="new_file_name">Name of this new test file<br/>(optional)</label>
         <div>
           <input id="new_file_name" type="text" name="new_file_name" placeholder="is_a_user.feature">
           <div class="example">Example: <strong>has_children.feature</strong></div>
@@ -82,7 +93,7 @@
       </div>
 
       <div class="one_line_field_container">
-        <label for="feature_description">This <strong>file</strong> is special because the user says:</label>
+        <label for="feature_description">This <strong>file</strong> is special because the user says</label>
         <div>
           <input id="feature_description" type="text" name="feature_description" placeholder="I am a user">
           <div class="example">Example: <strong>I have children</strong></div>
@@ -90,7 +101,7 @@
       </div>
 
       <div class="one_line_field_container">
-        <label for="scenario_description">This <strong>test</strong> is special because the user says:</label>
+        <label for="scenario_description">This <strong>test</strong> is special because the user says</label>
         <div>
           <input id="scenario_description" type="text" name="scenario_description" placeholder="I have a name">
           <div class="example">Example: <strong>I allow visitation</strong></div>
@@ -102,8 +113,19 @@
   </section>
 
   <section id="output_container">
-    <div>Once the test has been generated, you will need to edit it. You can download it as a full <code>.feature</code> file or tap 'copy' and paste one test into your own <code>.feature</code> file.</div>
+
+    <span class="step_number" alt="Step 3">③</span>
+
+    <div>
+      <p>
+        If you use <a href="https://docassemble.org/docs/fields.html#index%20variables">index variables</a> or <a href="https://docassemble.org/docs/fields.html#generic">generic objects</a>, you will need to edit the generated code.
+      </p>
+      <p>
+        You can download it as a full <code>.feature</code> file or tap 'copy' and paste the code into a new <code>.feature</code> file.
+      </p>
+    </div>
     <button><a id="download_test_file" download="tests.feature"><span class="download_icon">&#8681;</span> Download generated file</a></button>
+    <span>or</span>
     <button id="copy_scenario">Copy the code below</button>
     <pre id="scenario"></pre>
   </section>
