@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ALKiln Bricks</title>
+  <link rel="stylesheet" type="text/css" href="styles.css" media="screen" />
+</head>
+<body>
+  <header>
+    <h2><span>ALKiln Bricks</span></h2>
+  </header>
+
+  <section id="resources">
+    <p><img src="noun_Book_3716540.svg" class="icon small"><span>&nbsp;&nbsp;</span><a href="https://suffolklitlab.org/docassemble-AssemblyLine-documentation/docs/alkiln">Documentation for using ALKiln</a></p>
+  </section>
+
+  <section id="brick_picker">
+    <ul class="step_groups">
+      <li class="step_group">
+        <ul class="steps starting">
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+        </ul>
+      </li>
+      <li class="step_group interactive">
+        <ul class="steps">
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+        </ul>
+      </li>
+      <li class="step_group observational">
+        <ul class="steps">
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+        </ul>
+      </li>
+      <li class="step_group other">
+        <ul class="steps">
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+        </ul>
+      </li>
+      <li class="step_group">
+        <ul class="steps">
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+        </ul>
+      </li>
+      <li class="step_group">
+        <ul class="steps">
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+        </ul>
+      </li>
+      <li class="step_group">
+        <ul class="steps">
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+          <li class="step"></li>
+        </ul>
+      </li>
+    </ul>
+    <p><label for="var_data_upload"><span class="upload_icon">&#8593;</span> Upload your JSON variable file:</label> <input id="var_data_upload" name="var_data_upload" type="file"/></p>
+    <p>Or paste your docassemble 'show variables and values' data into the textarea</p>
+    <div class="error_output"></div>
+    <textarea id="da_data" placeholder="Paste data here" rows="4"></textarea>
+  </section>
+
+  <section id="extra_options_container">
+    <!-- <button class="toggler" for="options_container">▼ Edit test options</button> -->
+
+    <button class="toggler" for="ignore_container">▼ Edit excluded text</button>
+    <div id="ignore_container" class="togglee collapsed">
+
+      <div>Automatically excluded variable names:</div>
+      <code id="auto_excluded_keys_only"></code>
+      <br><br>
+
+      <!-- Why offer them this fine-grained detail till we know it's needed? -->
+      <!-- <div id="ignore_keys"></div> -->
+      
+      <div id="ignore_anywhere_container" display="none">
+        <p>Customize the list of text that will cause a row in the table to be excluded. The text might be anywhere in the variable name or in the value.</p>
+        <p><label for="exclude_upload"><span class="upload_icon">&#8593;</span> Upload a custom JSON list:</label> <input id="exclude_upload" name="exclude_upload" type="file"/></p>
+        <p>Or edit the textarea below</p>
+        <button id="reset_ignore">ⓧ Reset excluded text</button>
+        <div class="error_output"></div>
+        <textarea id="ignore_anywhere" name="" cols="" rows=""></textarea> 
+      </div>
+    </div>
+  </section>
+
+  <section id="custom_values_container">
+
+    <div>
+      <p>Remember you will probably need to edit the code after you've generated it here.</p>
+      <div class="one_line_field_container">
+          <label for="scenario_description">This scenario is special because:</label>
+          <input id="scenario_description" type="text" name="scenario_description" placeholder="User has special circumstance">
+      </div>
+      <div class="example">Example: <strong>Court date has passed</strong></div>
+    </div>
+
+    <div>
+      <div class="one_line_field_container">
+          <label for="yaml_file_name">Interview YAML file name:</label>
+          <input id="yaml_file_name" type="text" name="yaml_file_name" placeholder="name_of_yaml_file">
+      </div>
+      <div class="example">Example: <strong>file_a_motion</strong></div>
+    </div>
+
+    <div>
+      <div class="one_line_field_container">
+          <label for="question_id">Final question id:</label>
+          <input id="question_id" type="text" name="question_id" placeholder="a question id">
+      </div>
+      <div class="example">Example: <strong>next steps</strong></div>
+    </div>
+
+    <!-- <div>
+      <label for="num_signatures">How many people sign?</label>
+      <input type="number" name="num_signatures" id="num_signatures" value="0">  
+    </div> -->
+  </section>
+
+  <section id="output_container">
+    <div>Once the test has been generated, you will need to edit it. You can download it as a full <code>.feature</code> file or tap 'copy' and paste one test into your own <code>.feature</code> file.</div>
+    <button><a id="download_test_file" download="tests.feature"><span class="download_icon">&#8681;</span> Download generated file</a></button>
+    <button id="copy_scenario">Copy the code below</button>
+    <div id="scenario"></div>
+  </section>
+
+  <script type="text/javascript" src="generate.js"></script>
+</body>
+</html>
