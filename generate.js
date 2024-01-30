@@ -1,84 +1,3 @@
-// generate.js
-
-// ============================
-// Cut down on unneeded data
-// ============================
-let keys_to_ignore = [
-  // === AssemblyLine-specific keywords to skip
-  'all_courts',
-  // Less sure these are safe to ignore
-  'ask_number',
-  'ask_object_type',
-  'object_type',
-  'gathered',
-];
-
-// Conceptual version
-// Ignore text we should ignore wherever it appears, even in a fully formed variable name
-let ignore_anywhere_default = [
-  // === AssemblyLine-specific keywords to skip
-  '_attachment',
-  '_bundle',
-  'court_emails',
-  'download_titles',
-  'form_approved_for_email_filing',
-  'github_user',
-  'interview_metadata',
-  'interview_short_title',
-  'macourts',
-  'package_name',
-  'package_version_number',
-  'preferred_court',
-  'signature_fields',
-  'speak_text',
-  'started_on_phone',
-  'user_has_saved_answers',
-  'github_repo_name',
-  'allow_cron',
-  'allowed_courts',
-  '_geocoded',
-  '.uses_parts',
-  `.court_code`,
-  `.department`,
-  // `.name`, `.phone`, `.description`,
-  `.division`,
-  `.fax`,
-  `.has_po_box`,
-
-  // === da
-  '_internal',
-  'nav',
-  'url_args',
-  '_class',
-  'auto_gather',
-  'instanceName',
-  'mimetype',  // Not sure about removing this one
-  'multi_user',
-  // --- files
-  'file_info',
-  // 'filename',  // Possibility to identify some signatures
-  'persistent',
-  'private',
-  'convert_to_pdf_a',
-  'convert_to_tagged_pdf',
-  'extension',
-  'valid_formats',
-  'encrypted',
-  'has_specific_filename',
-  // --- address
-  'geolocate_response',
-  'norm_long',
-  'city_only',
-  'geolocated',
-  'orig_address',
-  'latitude',
-  'longitude',
-  'norm',
-  'geolocate_success',
-  'complete_attribute',
-];
-
-
 /*
 Before we can continue:
 Q1: How do we know if it has a 'choice' name?
@@ -109,8 +28,8 @@ let get_story_row = function({ name, value, }, debug=false) {
   let row;
 
   // Ignore text we should ignore wherever it appears, even in a fully formed variable name
-  if ( ignore_anywhere.includes( name )) { return row; }
-  for ( let to_ignore of ignore_anywhere ) {
+  if ( ignore_anywhere_in_var_name.includes( name )) { return row; }
+  for ( let to_ignore of ignore_anywhere_in_var_name ) {
     if ( name.includes( to_ignore ) ) { return row; }
   }
 
@@ -169,8 +88,8 @@ parse.start = function ({ name, value, }, debug) {
 parse.filter = function ({ name, value, }, debug) {
   // Filters - makes sure each item in processed by the
   // right function based on its type.
-  if ( keys_to_ignore.includes( name )) { return []; }
-  if ( ignore_anywhere.includes( name )) { return []; }  // logging everything was annoying
+  if ( ignore_if_is_key.includes( name )) { return []; }
+  if ( ignore_anywhere_in_var_name.includes( name )) { return []; }  // logging everything was annoying
 
   let var_name = name;
   let val_type = typeof value;
@@ -220,8 +139,8 @@ parse.object = function ({ name, value, }, debug) {
   }
 
   for ( let key in new_obj ) {
-    if ( keys_to_ignore.includes( key )) { continue; }
-    if ( ignore_anywhere.includes( key )) { continue; }  // logging everything was annoying
+    if ( ignore_if_is_key.includes( key )) { continue; }
+    if ( ignore_anywhere_in_var_name.includes( key )) { continue; }  // logging everything was annoying
 
     let var_name = get_object_name( is_class, name, key, debug );
     let new_value = new_obj[ key ];
@@ -486,8 +405,8 @@ tableInput.addEventListener( 'input', update_output );  // ends text area event 
 // ============================
 // Adjusting size of elements based on their contents
 // ============================
-// At the moment, only `ignore_anywhere` is being adjusted
-let fit_to_content_ids = ['ignore_anywhere'];
+// At the moment, only `ignore_anywhere_in_var_name` is being adjusted
+let fit_to_content_ids = ['ignore_anywhere_in_var_name'];
 
 let fit_textarea_to_content = function ( node ) {
   if ( fit_to_content_ids.includes( node.id )) {
@@ -502,29 +421,29 @@ let fit_textarea_to_content = function ( node ) {
 // ============================
 // Excluding rows based on their contents
 // ============================
-// keys_to_ignore tests only the variable names, not the whole contents of the row.
+// ignore_if_is_key tests only the variable names, not the whole contents of the row.
 // THIS VALUE STAYS THE SAME ALWAYS. It's hard-coded in here.
 // Show this list to the user so they might better understand what's going on.
 let keys_to_exclude_node = document.getElementById( 'auto_excluded_keys_only' );
-keys_to_exclude_node.innerText = JSON.stringify( keys_to_ignore );
+keys_to_exclude_node.innerText = JSON.stringify( ignore_if_is_key, null, 2 );
 
 // 
-// ignore_anywhere CAN change. Show current value and allow changes.
-let exclude_anywhere_node = document.getElementById( 'ignore_anywhere' );
-let ignore_anywhere_default_alphabetical = ignore_anywhere_default.sort(function (a, b) {
+// ignore_anywhere_in_var_name CAN change. Show current value and allow changes.
+let exclude_anywhere_in_var_name_node = document.getElementById( 'ignore_anywhere_in_var_name' );
+let ignore_anywhere_default_alphabetical = ignore_anywhere_in_var_name_default.sort(function (a, b) {
     if (a > b) { return 1; }
     if (b > a) { return -1; }
     return 0;
 });
-let ignore_anywhere = ignore_anywhere_default_alphabetical;
-exclude_anywhere_node.value = JSON.stringify( ignore_anywhere, null, 2 );
+let ignore_anywhere_in_var_name = ignore_anywhere_default_alphabetical;
+exclude_anywhere_in_var_name_node.value = JSON.stringify( ignore_anywhere_in_var_name, null, 2 );
 let ignore_error = document.querySelector( 'section#extra_options_container .error_output' );
 
 
-// Listen for changes that customize the ignore_anywhere list
+// Listen for changes that customize the ignore_anywhere_in_var_name list
 document.body.addEventListener( 'input', function( event ) {
   fit_textarea_to_content( event.target );
-  if ( event.target.id === 'ignore_anywhere' ) {
+  if ( event.target.id === 'ignore_anywhere_in_var_name' ) {
     update_exclude_anywhere( event.target.value );
     update_output();
   }
@@ -538,7 +457,7 @@ let update_custom_exclusion_error = function ( err_msg ) {
 }
 
 let update_exclude_anywhere = function ( new_value ) {
-  // Set the value for ignore_anywhere and size of textarea. Handle errors.
+  // Set the value for ignore_anywhere_in_var_name and size of textarea. Handle errors.
   // Do not change contents of textarea or user will not be able to edit it.
   if ( new_value ) {
     try {
@@ -549,7 +468,7 @@ let update_exclude_anywhere = function ( new_value ) {
         let error = `Error: The data is not a JSON list of strings. This tool can only use a list of strings to exclude rows in the story table.`
         update_custom_exclusion_error( error );
       } else {
-        ignore_anywhere = maybe_exclusion_list;
+        ignore_anywhere_in_var_name = maybe_exclusion_list;
         update_custom_exclusion_error('');
       }
     } catch ( error ) {
@@ -557,10 +476,10 @@ let update_exclude_anywhere = function ( new_value ) {
     }
   } else {
     update_custom_exclusion_error('');
-    ignore_anywhere = [];
+    ignore_anywhere_in_var_name = [];
   }
 
-  fit_textarea_to_content( exclude_anywhere_node );
+  fit_textarea_to_content( exclude_anywhere_in_var_name_node );
 }
 
 let exclude_uploader = document.getElementById(`exclude_upload`);
@@ -574,7 +493,7 @@ exclude_uploader.addEventListener( 'change', function () {
       try {
         // Get the data
         let custom_exclusion_json = JSON.parse( reader.result );
-        exclude_anywhere_node.value = JSON.stringify( custom_exclusion_json, null, 2 );
+        exclude_anywhere_in_var_name_node.value = JSON.stringify( custom_exclusion_json, null, 2 );
         update_exclude_anywhere( custom_exclusion_json );
         // Build the new story
         update_output();
@@ -590,12 +509,17 @@ exclude_uploader.addEventListener( 'change', function () {
 
 let reset_ignore_anywhere = function () {
   // Ignore text we should ignore wherever it appears, even in a fully formed variable name
-  exclude_anywhere_node.value = JSON.stringify( ignore_anywhere_default_alphabetical, null, 2 );
+  exclude_anywhere_in_var_name_node.value = JSON.stringify( ignore_anywhere_default_alphabetical, null, 2 );
   update_exclude_anywhere( ignore_anywhere_default_alphabetical );
   update_output();
 };
 // 'Reset' it at the start
 reset_ignore_anywhere();
+
+// TODO: allow easier formatting for list of vars to ignore
+function convert_to_human_ignore_list() {}
+
+function convert_from_human_ignore_list() {}
 
 // 'click' listeners
 document.body.addEventListener( 'click', ( event ) => {

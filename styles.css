@@ -187,3 +187,16 @@ button[disabled] {
 }
 
 .download_icon, .upload_icon { text-decoration: underline;  }
+
+/*#reset_ignore {
+  display: flex;
+  align-items: center;
+}
+
+#reset_ignore span {
+  flex-grow: 0;
+}
+
+.close_icon {
+  fon*/t-size: 1.5em;
+}

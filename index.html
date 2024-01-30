@@ -27,10 +27,6 @@
     <button class="toggler" for="ignore_container">▼ Edit excluded text</button>
     <div id="ignore_container" class="togglee collapsed">
 
-      <div>Automatically excluded variable names:</div>
-      <code id="auto_excluded_keys_only"></code>
-      <br><br>
-
       <!-- Why offer them this fine-grained detail till we know it's needed? -->
       <!-- <div id="ignore_keys"></div> -->
       
@@ -38,10 +34,18 @@
         <p>Customize the list of text that will cause a row in the table to be excluded. The text might be anywhere in the variable name or in the value.</p>
         <p><label for="exclude_upload"><span class="upload_icon">&#8593;</span> Upload a custom JSON list:</label> <input id="exclude_upload" name="exclude_upload" type="file"/></p>
         <p>Or edit the textarea below</p>
-        <button id="reset_ignore">ⓧ Reset excluded text</button>
+        <button id="reset_ignore">
+          <!-- <span class="close_icon">ⓧ</span> -->
+          <span>Reset excluded text</span>
+        </button>
         <div class="error_output"></div>
-        <textarea id="ignore_anywhere" name="" cols="" rows=""></textarea> 
+        <textarea id="ignore_anywhere_in_var_name" name="" cols="" rows=""></textarea>
       </div>
+
+      <br/>
+      <div>Automatically excluded keys:</div>
+      <pre id="auto_excluded_keys_only"></pre>
+
     </div>
   </section>
 
@@ -85,6 +89,7 @@
     <pre id="scenario"></pre>
   </section>
 
+  <script type="text/javascript" src="exclude.js"></script>
   <script type="text/javascript" src="generate.js"></script>
 </body>
 </html>
