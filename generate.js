@@ -303,8 +303,7 @@ let output = '';
 let get_YAML_file_name = function ({ data }) {
   let node = document.getElementById( 'yaml_file_name' );
   // Example data.i filename: docassemble.playground12ALTestingTestMain:all_tests.yml
-  let name = (data && data.i && data.i.replace( /.+:/, '' )) || 'your_filename.yml';
-  console.log(name)
+  let name = (data && data.i && data.i.replace( /.+:/, '' )) || node.placeholder;
   if ( node && node.value && node.value !== '' ) {
     name = node.value;
   }
@@ -313,7 +312,7 @@ let get_YAML_file_name = function ({ data }) {
 
 let get_question_id = function () {
   let node = document.getElementById( 'question_id' );
-  let id = 'a question id';
+  let id = node.placeholder;
   if ( node && node.value && node.value !== '' ) {
     id = node.value;
   }
@@ -336,6 +335,19 @@ let get_scenario_description = function () {
     description = node.value;
   }
   return description;
+}
+
+function set_download_name() {
+  let filename_node = document.getElementById('new_file_name');
+  let name = filename_node.placeholder;
+  if ( filename_node && filename_node.value && filename_node.value !== '' ) {
+    name = filename_node.value;
+  }
+  if ( !name.endsWith('.feature') ) {
+    name += '.feature';
+  }
+  let download_node = document.getElementById('download_test_file');
+  download_node.download = name;
 }
 
 let get_test_start = function ({ data }) {
@@ -383,11 +395,6 @@ let update_output = function () {
     // Get data
     story = story.concat( get_story( vars ));
 
-    // // Add early part of test
-    // let test_length = `slow`;
-    // if ( story.length <= 100 ) { test_length = `fast`; }
-    // output += ` @${ test_length }`;
-
   // If no input or erroring input
   } catch ( error) {
     if ( tableInput.value !== '' ) {
@@ -400,17 +407,13 @@ let update_output = function () {
   for ( let row of story ) {
     output += `\n    ${ row }`;
   }
-  // // Add signature rows if they exist
-  // let sigs = Array( get_num_signature_rows() );
-  // for ( let row of sigs ) {
-  //   output += `\n    |  |  | /sign |`;
-  // }
 
   scenario.innerText = output;
 
-  let download_contents = `Feature: Description of broad purpose for all scenarios in here${ output }`;
+  set_download_name();
   let download = document.getElementById(`download_test_file`);
-  download.href = `data:text/plain, ${ encodeURIComponent( download_contents )}`;
+  // No extra spaces
+  download.href = `data:text/plain,${ encodeURIComponent( output )}`;
 };
 
 tableInput.addEventListener( 'input', update_output );  // ends text area event listener
