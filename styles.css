@@ -80,7 +80,7 @@ section {
   border: 1px solid gray;
   border-radius: 2px;
   margin: 0 auto;
-  margin-bottom: .6em;
+  margin-bottom: 1em;
   padding: 1.2em 1em .5em 2.5em;
   max-width: 600px;
   text-align: left;
@@ -88,6 +88,7 @@ section {
 
 section:first-child {
   margin-top: .6em;
+  margin-bottom: .6em;
 }
 
 /* Helvetica doesn't have great line-height spacing */
@@ -105,17 +106,26 @@ code {
   border-radius: 5px;
 }
 
+hr {
+  margin-top: 1rem;
+}
+
 #intro {
   background: transparent;
   border-style: none;
 }
 
 .step_number {
-  font-size: 2rem;
-  line-height: 2rem;
+  font-size: 4rem;
+  line-height: 3.3rem;
   position: absolute;
-  top: 0;
-  left: .5rem;
+  top: -1.5rem;
+  left: -1.1rem;
+  background: white;
+  width: 2.8rem;
+  height: 2.7rem;
+  text-align: center;
+  border-radius: 50%;
 }
 
 .icon.small {
@@ -141,7 +151,7 @@ code {
   margin-bottom: 1.1em;
 }
 
-#feature, #scenario {
+.uneditable_code {
   background-color: #f3fff6;
   font-family: monospace;
   border: 1px solid gray;
@@ -157,6 +167,10 @@ code {
 
 #auto_excluded_keys_only {
   font-family: monospace;
+}
+
+#auto_excluded_keys_only br {
+  line-height: 0rem;
 }
 
 .togglee {

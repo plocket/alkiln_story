@@ -59,7 +59,7 @@
     </section>
 
     <section id="data_container">
-      <span class="step_number" alt="Step 1">②</span>
+      <span class="step_number" alt="Step 2">②</span>
 
       <p>Choose one:</p>
       <p>
@@ -86,7 +86,9 @@
 
       <!-- <button class="toggler" for="options_container">▼ Edit test options</button> -->
 
-      <button id="toggle_exclude" class="toggler" for="ignore_container">▼ Edit excluded text (advanced)</button>
+      <hr/>
+
+      <button id="toggle_exclude" class="toggler" for="ignore_container">▼ Edit excluded variable names (advanced)</button>
       <div id="ignore_container" class="togglee collapsed">
 
         <!-- If we find users want it, offer them this fine-grained detail -->
@@ -103,17 +105,16 @@
           <div id="ignored_error_output" class="error_output"></div>
           <textarea id="ignore_anywhere_in_var_name" name="" cols="" rows=""></textarea>
         </div>
-
-        <br/>
+        
         <div>Automatically excluded keys:</div>
-        <pre id="auto_excluded_keys_only"></pre>
+        <pre id="auto_excluded_keys_only" class="uneditable_code"></pre>
 
       </div>
     </section>
 
     <section id="custom_values_container">
 
-      <span class="step_number" alt="Step 2">③</span>
+      <span class="step_number" alt="Step 3">③</span>
 
       <div>
         <p>
@@ -167,20 +168,20 @@
 
     <section id="output_container">
 
-      <span class="step_number" alt="Step 3">④</span>
+      <span class="step_number" alt="Step 4">④</span>
 
       <p>
         You can download this new test here and then upload it to your package's "Sources" folder or, instead, just copy the code and put it wherever you want.
       </p>
 
-      <button><a id="download_test_file" download="tests.feature"><span class="download_icon">&#8681;</span> Download generated file</a></button>
-      <span>or</span>
-      <button id="copy_scenario">Copy the code below</button>
-      <pre id="scenario"></pre>
-
       <p>
         Note: If you use <a href="https://docassemble.org/docs/fields.html#index%20variables">index variables</a> or <a href="https://docassemble.org/docs/fields.html#generic">generic objects</a>, you will need to edit the generated code. This is a more advanced task. To learn more, read the <a href="https://suffolklitlab.org/docassemble-AssemblyLine-documentation/docs/alkiln/#story-tables">Story Tables section</a> of the documentation. Specifically pay attention to the <a href="https://suffolklitlab.org/docassemble-AssemblyLine-documentation/docs/alkiln/#trigger">trigger section</a>.
       </p>
+
+      <button><a id="download_test_file" download="tests.feature"><span class="download_icon">&#8681;</span> Download generated file</a></button>
+      <span>or</span>
+      <button id="copy_scenario">Copy the code below</button>
+      <pre id="scenario" class="uneditable_code"></pre>
     </section>
   </div>
 

@@ -455,7 +455,8 @@ let fit_textarea_to_content = function ( node ) {
 // THIS VALUE STAYS THE SAME ALWAYS. It's hard-coded in here.
 // Show this list to the user so they might better understand what's going on.
 let keys_to_exclude_node = document.getElementById( 'auto_excluded_keys_only' );
-keys_to_exclude_node.innerText = JSON.stringify( ignore_if_is_key, null, 2 );
+let keys_exclude_text = ignore_if_is_key.join('\n');
+keys_to_exclude_node.innerHTML = keys_exclude_text;  //JSON.stringify( ignore_if_is_key, null, 2 );
 
 // 
 // ignore_anywhere_in_var_name CAN change. Show current value and allow changes.
