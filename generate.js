@@ -364,7 +364,16 @@ let get_test_start = function ({ data }) {
 let update_var_data_error = function ( err_msg ) {
   // Either make the error visible or hide it, depending on what's needed
   // Needs a better name or something
-  if ( err_msg !== '' ) { console.error( err_msg ); }
+  console.log(1)
+  console.log(err_msg)
+  if ( err_msg !== '' ) {
+    console.log(2)
+    console.error( err_msg );
+    document.getElementById('data_error_container').className = document.getElementById('data_error_container').className.replace(/\s*hidden/, '');
+  } else {
+    console.log(3)
+    document.getElementById('data_error_container').className = document.getElementById('data_error_container').className += ' hidden';
+  }
   data_error.innerText = err_msg;
 }
 
@@ -399,6 +408,9 @@ let update_output = function () {
   } catch ( error) {
     if ( tableInput.value !== '' ) {
       update_var_data_error( error );
+    } else {
+      // Don't show error when textarea is empty again
+      update_var_data_error('');
     }
   }
   
@@ -598,12 +610,12 @@ vars_uploader.addEventListener( 'change', function () {
         update_var_data_error( '' );
       } catch ( error ) {
         update_var_data_error( `Could not load "${ vars_uploader.files[0].name }". ${ error }` );
+
       }
       vars_uploader.value = "";
     };
     reader.readAsText( vars_uploader.files[0] );
   }
-
 });
 
 

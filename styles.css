@@ -8,6 +8,7 @@
 body {
   padding: .3em 1em;
   font-family: Helvetica;
+  font-weight: lighter;
   text-align: center;
 }
 
@@ -79,12 +80,34 @@ section {
   border: 1px solid gray;
   border-radius: 2px;
   margin: 0 auto;
-  margin-bottom: 1em;
+  margin-bottom: .6em;
   padding: 1.2em 1em .5em 2.5em;
-/*  padding-left: 2.5rem;*/
-/*  padding-top: 1.2rem;*/
   max-width: 600px;
   text-align: left;
+}
+
+section:first-child {
+  margin-top: .6em;
+}
+
+/* Helvetica doesn't have great line-height spacing */
+p, div {
+  line-height: 1.3em;
+}
+
+strong {
+  font-weight: bold;
+}
+
+code {
+  background: white;
+  padding: .2em;
+  border-radius: 5px;
+}
+
+#intro {
+  background: transparent;
+  border-style: none;
 }
 
 .step_number {
@@ -111,6 +134,11 @@ section {
 
 #resources p {
   margin: 0 0 0.3em;
+}
+
+#upload_input {
+  margin-top: -.5em;
+  margin-bottom: 1.1em;
 }
 
 #feature, #scenario {
@@ -149,18 +177,23 @@ section {
   left: 0;
 }
 
+#data_error_container {
+  border: 1px solid red;
+  padding: 0 .2em;
+  border-radius: 2px;
+}
+
 .error_output {
   color: red;
 }
 
-.ok {
-  display: none;
+.icon.error {
+  filter: brightness(0) saturate(100%) invert(29%) sepia(86%) saturate(5309%) hue-rotate(0deg) brightness(99%) contrast(109%);
 }
 
-/*.error {
-  display: block;
-  color: red;
-}*/
+.ok, .hidden {
+  display: none;
+}
 
 label, input {
   display: inline-block;

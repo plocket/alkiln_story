@@ -9,126 +9,180 @@
     <h2><span>AL Story Test Generator<img class="icon" src="noun_dough_3639378.svg"></span></h2>
   </header>
 
-  <section id="resources">
-    <p><img src="noun_Book_3716540.svg" class="icon small"><span>&nbsp;&nbsp;</span><a href="https://suffolklitlab.org/docassemble-AssemblyLine-documentation/docs/alkiln">Documentation for using ALKiln</a></p>
-    <p><img src="noun_Error_3671601.svg" class="icon small">&nbsp;&nbsp;<span>Did you get an error? </span><a href="https://jsonlint.com/?code=">Use JSON validator on your JSON code</a></p>
-  </section>
-
-  <section id="data_container">
-
-    <span class="step_number" alt="Step 1">①</span>
-
-    <p>Choose one:</p>
-    <p>
-      <label for="var_data_upload"><span class="upload_icon">&#8593;</span> Upload your JSON variable file:</label>
+  <div class="main">
+    <section id="intro">
       <p>
-        <input id="var_data_upload" name="var_data_upload" type="file"/>
-      </p>
-    </p>
-    <p>
-      Or paste your docassemble 'show variables and values' data into the textarea:
-    </p>
-    <div id="data_error_output" class="error_output"></div>
-    <textarea id="da_data" placeholder="Paste data here" rows="4"></textarea>
-
-    <!-- <button class="toggler" for="options_container">▼ Edit test options</button> -->
-
-    <button id="toggle_exclude" class="toggler" for="ignore_container">▼ Edit excluded text (advanced)</button>
-    <div id="ignore_container" class="togglee collapsed">
-
-      <!-- Why offer them this fine-grained detail till we know it's needed? -->
-      <!-- <div id="ignore_keys"></div> -->
-      
-      <div id="ignore_anywhere_container" display="none">
-        <p>Customize the list of text that will cause a row in the table to be excluded. The text might be anywhere in the variable name or in the value.</p>
-        <p><label for="exclude_upload"><span class="upload_icon">&#8593;</span> Upload a custom JSON list:</label> <input id="exclude_upload" name="exclude_upload" type="file"/></p>
-        <p>Or edit the textarea below</p>
-        <button id="reset_ignore">
-          <!-- <span class="close_icon">ⓧ</span> -->
-          <span>Reset excluded text</span>
-        </button>
-        <div id="ignored_error_output" class="error_output"></div>
-        <textarea id="ignore_anywhere_in_var_name" name="" cols="" rows=""></textarea>
-      </div>
-
-      <br/>
-      <div>Automatically excluded keys:</div>
-      <pre id="auto_excluded_keys_only"></pre>
-
-    </div>
-  </section>
-
-  <section id="custom_values_container">
-
-    <span class="step_number" alt="Step 2">②</span>
-
-    <div>
-      <p>
-        Customize the unique parts of the test file and of the test.<br/>
-        You <strong>must</strong> fill in the final question id.
-      </p>
-
-      <div class="one_line_field_container">
-        <label for="yaml_file_name">Interview YAML file name</br>(automatically detected)</label>
-        <div>
-          <input id="yaml_file_name" type="text" name="yaml_file_name" placeholder="your_interview.yml">
-          <div class="example">Example: <strong>file_a_motion.yml</strong></div>
-        </div>
-      </div>
-
-      <div class="one_line_field_container">
-        <label for="question_id"><strong>REQUIRED:</strong></br>ID of final question</label>
-        <div>
-          <input id="question_id" type="text" name="question_id" placeholder="none">
-          <div class="example">Example: <strong>download</strong></div>
-        </div>
-      </div>
-
-      <div class="one_line_field_container">
-        <label for="new_file_name">Name of this new test file<br/>(optional)</label>
-        <div>
-          <input id="new_file_name" type="text" name="new_file_name" placeholder="is_a_user.feature">
-          <div class="example">Example: <strong>has_children.feature</strong></div>
-        </div>
-      </div>
-
-      <div class="one_line_field_container">
-        <label for="feature_description">This <strong>file</strong> is special because the user says</label>
-        <div>
-          <input id="feature_description" type="text" name="feature_description" placeholder="I am a user">
-          <div class="example">Example: <strong>I have children</strong></div>
-        </div>
-      </div>
-
-      <div class="one_line_field_container">
-        <label for="scenario_description">This <strong>test</strong> is special because the user says</label>
-        <div>
-          <input id="scenario_description" type="text" name="scenario_description" placeholder="I have a name">
-          <div class="example">Example: <strong>I allow visitation</strong></div>
-        </div>
-      </div>
-
-    </div>
-
-  </section>
-
-  <section id="output_container">
-
-    <span class="step_number" alt="Step 3">③</span>
-
-    <div>
-      <p>
-        If you use <a href="https://docassemble.org/docs/fields.html#index%20variables">index variables</a> or <a href="https://docassemble.org/docs/fields.html#generic">generic objects</a>, you will need to edit the generated code.
+        Welcome to the AL Story Table generator!
       </p>
       <p>
-        You can download it as a full <code>.feature</code> file or tap 'copy' and paste the code into a new <code>.feature</code> file.
+        This tool is here to help you make a new test file for your docassemble ALKiln tests. Using the data from your interview, it will create a Story Table test you can download and put in your "Sources" folder.
       </p>
-    </div>
-    <button><a id="download_test_file" download="tests.feature"><span class="download_icon">&#8681;</span> Download generated file</a></button>
-    <span>or</span>
-    <button id="copy_scenario">Copy the code below</button>
-    <pre id="scenario"></pre>
-  </section>
+      <p>
+        If you want, you can <a href="https://suffolklitlab.org/docassemble-AssemblyLine-documentation/docs/alkiln">read more about ALKiln in its documentation</a>.
+      </p>
+
+      <p>
+        Follow the steps below to create a very simple test file. You can ignore advanced features if you want.
+      </p>
+    </section>
+
+    <!--
+      https://altcodeunicode.com/alt-codes-circled-number-letter-symbols-enclosed-alphanumerics/
+      ①
+      ②
+      ③
+      ④
+      ⑤
+      ⑥
+      ⑦
+      ⑧
+      ⑨
+     -->
+
+    <section id="prep">
+      <span class="step_number" alt="Step 1">①</span>
+
+      <p>To prepare your data:</p>
+      <ol>
+        <li>Run your docassemble interview until you get to the page where you want to end your test.</li>
+        <li>Copy the variables that are on that page. To do that:
+          <ol>
+            <li>Tap on the <code>&lt;/></code> symbol your interview's nav bar.</li>
+            <li>Scroll down till you see the "Show variables and values" button.</li>
+            <li>Tap that button. It will open a new page.</li>
+            <li>Ignore how absolutely bonkers that page looks.</li>
+            <li>Copy all of the text that appears on that page.</li>
+          </ol>
+        </li>
+        <li>Come back here and paste that text into the text area in step 2.</li>
+      </ol>
+    </section>
+
+    <section id="data_container">
+      <span class="step_number" alt="Step 1">②</span>
+
+      <p>Choose one:</p>
+      <p>
+        <label for="var_data_upload"><span class="upload_icon">&#8593;</span> Upload your JSON variable file:</label>
+        <p id="upload_input">
+          <input id="var_data_upload" name="var_data_upload" type="file"/>
+        </p>
+      </p>
+      <p>
+        Or paste your docassemble 'show variables and values' data into the textarea:
+      </p>
+      <div id="data_error_container" class="hidden">
+        <p>
+          <img src="noun_Error_3671601.svg" class="icon small error">
+          <span>There was an error in your interview data:</span>
+          <span id="data_error_output" class="error_output"></span>
+        </p>
+        <p>
+          <span>Try using a </span><a href="https://jsonlint.com/?code=">JSON validator</a><span> on your JSON code.</span>
+        </p>
+      </div>
+
+      <textarea id="da_data" placeholder="Paste data here" rows="4"></textarea>
+
+      <!-- <button class="toggler" for="options_container">▼ Edit test options</button> -->
+
+      <button id="toggle_exclude" class="toggler" for="ignore_container">▼ Edit excluded text (advanced)</button>
+      <div id="ignore_container" class="togglee collapsed">
+
+        <!-- If we find users want it, offer them this fine-grained detail -->
+        <!-- <div id="ignore_keys"></div> -->
+
+        <div id="ignore_anywhere_container" display="none">
+          <p>Customize the list of text that will cause a row in the table to be excluded. The text might be anywhere in the variable name or in the value.</p>
+          <p><label for="exclude_upload"><span class="upload_icon">&#8593;</span> Upload a custom JSON list:</label> <input id="exclude_upload" name="exclude_upload" type="file"/></p>
+          <p>Or edit the textarea below</p>
+          <button id="reset_ignore">
+            <!-- <span class="close_icon">ⓧ</span> -->
+            <span>Reset excluded text</span>
+          </button>
+          <div id="ignored_error_output" class="error_output"></div>
+          <textarea id="ignore_anywhere_in_var_name" name="" cols="" rows=""></textarea>
+        </div>
+
+        <br/>
+        <div>Automatically excluded keys:</div>
+        <pre id="auto_excluded_keys_only"></pre>
+
+      </div>
+    </section>
+
+    <section id="custom_values_container">
+
+      <span class="step_number" alt="Step 2">③</span>
+
+      <div>
+        <p>
+          Customize the unique parts of the test file and of the test.<br/>
+          You <strong>must</strong> fill in the final question id.
+        </p>
+
+        <div class="one_line_field_container">
+          <label for="yaml_file_name">Interview YAML file name</br>(automatically detected)</label>
+          <div>
+            <input id="yaml_file_name" type="text" name="yaml_file_name" placeholder="your_interview.yml">
+            <div class="example">Example: <strong>file_a_motion.yml</strong></div>
+          </div>
+        </div>
+
+        <div class="one_line_field_container">
+          <label for="question_id"><strong>REQUIRED:</strong></br>ID of final question</label>
+          <div>
+            <input id="question_id" type="text" name="question_id" placeholder="none">
+            <div class="example">Example: <strong>download</strong></div>
+          </div>
+        </div>
+
+        <div class="one_line_field_container">
+          <label for="new_file_name">Name of this new test file<br/>(optional)</label>
+          <div>
+            <input id="new_file_name" type="text" name="new_file_name" placeholder="is_a_user.feature">
+            <div class="example">Example: <strong>has_children.feature</strong></div>
+          </div>
+        </div>
+
+        <div class="one_line_field_container">
+          <label for="feature_description">This <strong>file</strong> is special because the user says</label>
+          <div>
+            <input id="feature_description" type="text" name="feature_description" placeholder="I am a user">
+            <div class="example">Example: <strong>I have children</strong></div>
+          </div>
+        </div>
+
+        <div class="one_line_field_container">
+          <label for="scenario_description">This <strong>test</strong> is special because the user says</label>
+          <div>
+            <input id="scenario_description" type="text" name="scenario_description" placeholder="I have a name">
+            <div class="example">Example: <strong>I allow visitation</strong></div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section id="output_container">
+
+      <span class="step_number" alt="Step 3">④</span>
+
+      <p>
+        You can download this new test here and then upload it to your package's "Sources" folder or, instead, just copy the code and put it wherever you want.
+      </p>
+
+      <button><a id="download_test_file" download="tests.feature"><span class="download_icon">&#8681;</span> Download generated file</a></button>
+      <span>or</span>
+      <button id="copy_scenario">Copy the code below</button>
+      <pre id="scenario"></pre>
+
+      <p>
+        Note: If you use <a href="https://docassemble.org/docs/fields.html#index%20variables">index variables</a> or <a href="https://docassemble.org/docs/fields.html#generic">generic objects</a>, you will need to edit the generated code. This is a more advanced task. To learn more, read the <a href="https://suffolklitlab.org/docassemble-AssemblyLine-documentation/docs/alkiln/#story-tables">Story Tables section</a> of the documentation. Specifically pay attention to the <a href="https://suffolklitlab.org/docassemble-AssemblyLine-documentation/docs/alkiln/#trigger">trigger section</a>.
+      </p>
+    </section>
+  </div>
 
   <script type="text/javascript" src="exclude.js"></script>
   <script type="text/javascript" src="generate.js"></script>
