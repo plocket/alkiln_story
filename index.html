@@ -20,7 +20,6 @@
       <p>
         If you want, you can <a href="https://suffolklitlab.org/docassemble-AssemblyLine-documentation/docs/alkiln">read more about ALKiln in its documentation</a>.
       </p>
-
       <p>
         Follow the steps below to create a very simple test file. You can ignore advanced features if you want.
       </p>
@@ -62,32 +61,39 @@
       <span class="step_number" alt="Step 2">②</span>
 
       <p>Choose one:</p>
-      <p>
-        <label for="var_data_upload"><span class="upload_icon">&#8593;</span> Upload your JSON variable file:</label>
-        <p id="upload_input">
-          <input id="var_data_upload" name="var_data_upload" type="file"/>
-        </p>
-      </p>
-      <p>
-        Or paste your docassemble 'show variables and values' data into the textarea:
-      </p>
+      <div class="field_pair both">
+        <label for="var_data_upload" class="floating_label"><span class="upload_icon" alt="Upload icon">&#8593;</span> <span>Upload your JSON variable file:</span></label>
+        <input id="var_data_upload" name="var_data_upload" type="file"/>
+      </div>
+
+      <div class="field_pair label">
+        <label class="floating_label" for="da_data">
+          Or paste your docassemble 'show variables and values' data into this textarea:
+        </label>
+      </div>
+
       <div id="data_error_container" class="hidden">
         <p>
-          <img src="noun_Error_3671601.svg" class="icon small error">
+          <img src="noun_Error_3671601.svg" class="icon small error" alt="Error icon">
           <span>There was an error in your interview data:</span>
           <span id="data_error_output" class="error_output"></span>
         </p>
         <p>
+          <!-- TODO: See if we can paste the textarea contents after code= -->
           <span>Try using a </span><a href="https://jsonlint.com/?code=">JSON validator</a><span> on your JSON code.</span>
         </p>
       </div>
 
-      <textarea id="da_data" placeholder="Paste data here" rows="4"></textarea>
+      <div class="field_pair field">
+        <textarea id="da_data" placeholder="Paste data here" rows="4"></textarea>
+      </div>
+
 
       <!-- <button class="toggler" for="options_container">▼ Edit test options</button> -->
 
       <hr/>
 
+      <!-- Could wrap the below in a div and use top border instead of hr -->
       <button id="toggle_exclude" class="toggler" for="ignore_container">▼ Edit excluded variable names (advanced)</button>
       <div id="ignore_container" class="togglee collapsed">
 
@@ -95,17 +101,25 @@
         <!-- <div id="ignore_keys"></div> -->
 
         <div id="ignore_anywhere_container" display="none">
-          <p>Customize the list of text that will cause a row in the table to be excluded. The text might be anywhere in the variable name or in the value.</p>
-          <p><label for="exclude_upload"><span class="upload_icon">&#8593;</span> Upload a custom JSON list:</label> <input id="exclude_upload" name="exclude_upload" type="file"/></p>
-          <p>Or edit the textarea below</p>
+          <p>
+            Customize the list of words or characters that will cause a row in the table to be excluded. If the variable name has those words or characters anywhere in it, this generator will remove the variable.
+          </p>
+          <div class="field_pair both">
+            <label for="exclude_upload" class="floating_label"><span class="upload_icon" alt="Upload icon">&#8593;</span> Upload a custom JSON list of words or characters to exclude:</label>
+            <input id="exclude_upload" name="exclude_upload" type="file"/>
+          </div>
+          <div class="field_pair label">
+            <label for="ignore_anywhere_in_var_name" class="floating_label">Or edit this list of words or characters to exclude:</label>
+          </div>
           <button id="reset_ignore">
-            <!-- <span class="close_icon">ⓧ</span> -->
-            <span>Reset excluded text</span>
+            Reset excluded words
           </button>
           <div id="ignored_error_output" class="error_output"></div>
-          <textarea id="ignore_anywhere_in_var_name" name="" cols="" rows=""></textarea>
+          <div class="field_pair field">
+            <textarea id="ignore_anywhere_in_var_name" name="ignore_anywhere_in_var_name" cols="" rows=""></textarea>
+          </div>
         </div>
-        
+
         <div>Automatically excluded keys:</div>
         <pre id="auto_excluded_keys_only" class="uneditable_code"></pre>
 
