@@ -203,7 +203,7 @@ hr {
   left: 0;
 }
 
-#data_error_container {
+.error_container {
   border: 1px solid red;
   padding: 0 .2em;
   border-radius: 2px;

@@ -18,6 +18,10 @@ A2: Take care of that in the testing framework too? It's a confusion human might
 
 Q2.5: Followup to Q2 - what if the quotes are meant to be there?
 A2.5: ~Don't do that?~ nvm, taking care of that in test-generating code.
+
+TODO:
+- [ ] Ignore empty lines in custom exclusions
+- [ ] Custom exclusion instructions: if you don't know what this is, don't mess with it
 */
 
 // ============================
@@ -364,14 +368,9 @@ let get_test_start = function ({ data }) {
 let update_var_data_error = function ( err_msg ) {
   // Either make the error visible or hide it, depending on what's needed
   // Needs a better name or something
-  console.log(1)
-  console.log(err_msg)
   if ( err_msg !== '' ) {
-    console.log(2)
-    console.error( err_msg );
     document.getElementById('data_error_container').className = document.getElementById('data_error_container').className.replace(/\s*hidden/, '');
   } else {
-    console.log(3)
     document.getElementById('data_error_container').className = document.getElementById('data_error_container').className += ' hidden';
   }
   data_error.innerText = err_msg;
@@ -458,16 +457,16 @@ let keys_to_exclude_node = document.getElementById( 'auto_excluded_keys_only' );
 let keys_exclude_text = ignore_if_is_key.join('\n');
 keys_to_exclude_node.innerHTML = keys_exclude_text;  //JSON.stringify( ignore_if_is_key, null, 2 );
 
-// 
 // ignore_anywhere_in_var_name CAN change. Show current value and allow changes.
-let exclude_anywhere_in_var_name_node = document.getElementById( 'ignore_anywhere_in_var_name' );
 let ignore_anywhere_default_alphabetical = ignore_anywhere_in_var_name_default.sort(function (a, b) {
     if (a > b) { return 1; }
     if (b > a) { return -1; }
     return 0;
 });
 let ignore_anywhere_in_var_name = ignore_anywhere_default_alphabetical;
+let exclude_anywhere_in_var_name_node = document.getElementById( 'ignore_anywhere_in_var_name' );
 exclude_anywhere_in_var_name_node.value = JSON.stringify( ignore_anywhere_in_var_name, null, 2 );
+// exclude_anywhere_in_var_name_node.value = ignore_anywhere_in_var_name.join('\n');
 let ignore_error = document.getElementById( 'ignored_error_output' );
 
 
@@ -475,7 +474,7 @@ let ignore_error = document.getElementById( 'ignored_error_output' );
 document.body.addEventListener( 'input', function( event ) {
   fit_textarea_to_content( event.target );
   if ( event.target.id === 'ignore_anywhere_in_var_name' ) {
-    update_exclude_anywhere( event.target.value );
+    update_exclude_anywhere_list( event.target.value );
     update_output();
   }
 });  // ends listen for input
@@ -485,18 +484,27 @@ let update_custom_exclusion_error = function ( err_msg ) {
   // Needs a better name or something too
   if ( err_msg !== '' ) { console.error( err_msg ); }
   ignore_error.innerText = err_msg;
+  if ( err_msg !== '' ) {
+    document.getElementById('ignore_error_container').className = document.getElementById('ignore_error_container').className.replace(/\s*hidden/, '');
+  } else {
+    document.getElementById('ignore_error_container').className = document.getElementById('ignore_error_container').className += ' hidden';
+  }
+  ignore_error.innerText = err_msg;
 }
 
-let update_exclude_anywhere = function ( new_value ) {
+let update_exclude_anywhere_list = function ( new_value ) {
   // Set the value for ignore_anywhere_in_var_name and size of textarea. Handle errors.
   // Do not change contents of textarea or user will not be able to edit it.
   if ( new_value ) {
     try {
       let maybe_exclusion_list = new_value;
-      if ( typeof new_value === `string` ) { maybe_exclusion_list = JSON.parse( new_value ); }
+      if ( typeof new_value === `string` ) {
+        maybe_exclusion_list = JSON.parse( new_value );
+        // maybe_exclusion_list = new_value.split('\n');
+      }
       if ( !Array.isArray( maybe_exclusion_list )) {
         // Does not yet test that every item is a string
-        let error = `Error: The data is not a JSON list of strings. This tool can only use a list of strings to exclude rows in the story table.`
+        let error = `Error: The format of the data is wrong in some way. The data must be a list of words and/or characters with no commas.`
         update_custom_exclusion_error( error );
       } else {
         ignore_anywhere_in_var_name = maybe_exclusion_list;
@@ -513,27 +521,28 @@ let update_exclude_anywhere = function ( new_value ) {
   fit_textarea_to_content( exclude_anywhere_in_var_name_node );
 }
 
-let exclude_uploader = document.getElementById(`exclude_upload`);
-exclude_uploader.addEventListener( 'change', function () {
+let exclusions_uploader = document.getElementById(`exclude_upload`);
+exclusions_uploader.addEventListener( 'change', function () {
   // Allow uploading JSON list to ignore specific variables
   let reader = createReader();
   if ( !reader ) { return; }
 
-  if ( exclude_uploader.files && exclude_uploader.files[0] ) {
+  if ( exclusions_uploader.files && exclusions_uploader.files[0] ) {
     reader.onload = function() {
       try {
         // Get the data
         let custom_exclusion_json = JSON.parse( reader.result );
         exclude_anywhere_in_var_name_node.value = JSON.stringify( custom_exclusion_json, null, 2 );
-        update_exclude_anywhere( custom_exclusion_json );
+        // exclude_anywhere_in_var_name_node.value = custom_exclusion_json.join('\n');
+        update_exclude_anywhere_list( custom_exclusion_json );
         // Build the new story
         update_output();
       } catch ( error ) {
-        update_custom_exclusion_error( `Could not load "${ exclude_uploader.files[0].name }". ${ error }` );
+        update_custom_exclusion_error( `Could not load "${ exclusions_uploader.files[0].name }". ${ error }` );
       }
-      exclude_uploader.value = "";
+      exclusions_uploader.value = "";
     };
-    reader.readAsText( exclude_uploader.files[0] );
+    reader.readAsText( exclusions_uploader.files[0] );
   }
 
 });
@@ -541,7 +550,8 @@ exclude_uploader.addEventListener( 'change', function () {
 let reset_ignore_anywhere = function () {
   // Ignore text we should ignore wherever it appears, even in a fully formed variable name
   exclude_anywhere_in_var_name_node.value = JSON.stringify( ignore_anywhere_default_alphabetical, null, 2 );
-  update_exclude_anywhere( ignore_anywhere_default_alphabetical );
+  // exclude_anywhere_in_var_name_node.value = ignore_anywhere_default_alphabetical.join('\n');
+  update_exclude_anywhere_list( ignore_anywhere_default_alphabetical );
   update_output();
 };
 // 'Reset' it at the start
@@ -611,7 +621,6 @@ vars_uploader.addEventListener( 'change', function () {
         update_var_data_error( '' );
       } catch ( error ) {
         update_var_data_error( `Could not load "${ vars_uploader.files[0].name }". ${ error }` );
-
       }
       vars_uploader.value = "";
     };

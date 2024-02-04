@@ -59,10 +59,10 @@
         </label>
       </div>
 
-      <div id="data_error_container" class="hidden">
+      <div id="data_error_container" class="hidden error_container">
         <p>
           <img src="noun_Error_3671601.svg" class="icon small error" alt="Error icon">
-          <span>There was an error in your interview data:</span>
+          <span>There is an error in your interview data:</span>
           <span id="data_error_output" class="error_output"></span>
         </p>
         <p>
@@ -101,7 +101,19 @@
           <button id="reset_ignore">
             Reset excluded words
           </button>
-          <div id="ignored_error_output" class="error_output"></div>
+
+          <div id="ignore_error_container" class="hidden error_container">
+            <p>
+              <img src="noun_Error_3671601.svg" class="icon small error" alt="Error icon">
+              <span>There is an error in this data:</span>
+              <span id="ignored_error_output" class="error_output"></span>
+            </p>
+            <p>
+              <!-- TODO: See if we can paste the textarea contents after code= -->
+              <span>Try using a </span><a href="https://jsonlint.com/?code=">JSON validator</a><span> on your JSON code.</span>
+            </p>
+          </div>
+          
           <div class="field_pair field">
             <textarea id="ignore_anywhere_in_var_name" name="ignore_anywhere_in_var_name" cols="" rows=""></textarea>
           </div>
