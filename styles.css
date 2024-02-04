@@ -116,16 +116,33 @@ hr {
 }
 
 .step_number {
-  font-size: 4rem;
-  line-height: 3.3rem;
+  box-sizing: content-box;
   position: absolute;
   top: -1.5rem;
-  left: -1.1rem;
-  background: white;
-  width: 2.8rem;
-  height: 2.7rem;
+  left: -1.5rem;
+  scale: 80%;
+  font-weight: normal;
+
+  display: block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 40px;
+  padding: 10px;
   text-align: center;
   border-radius: 50%;
+  background: white;
+  border: 3px solid black;
+}
+
+.step_number span {
+  position: absolute;
+  top: 3px;
+  left: 0;
+}
+
+.step_number.step_4 span {
+  padding-right: 3px;
 }
 
 .icon.small {
