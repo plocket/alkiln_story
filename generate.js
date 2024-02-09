@@ -465,8 +465,8 @@ let ignore_anywhere_default_alphabetical = ignore_anywhere_in_var_name_default.s
 });
 let ignore_anywhere_in_var_name = ignore_anywhere_default_alphabetical;
 let exclude_anywhere_in_var_name_node = document.getElementById( 'ignore_anywhere_in_var_name' );
-exclude_anywhere_in_var_name_node.value = JSON.stringify( ignore_anywhere_in_var_name, null, 2 );
-// exclude_anywhere_in_var_name_node.value = ignore_anywhere_in_var_name.join('\n');
+// exclude_anywhere_in_var_name_node.value = JSON.stringify( ignore_anywhere_in_var_name, null, 2 );
+exclude_anywhere_in_var_name_node.value = ignore_anywhere_in_var_name.join('\n');
 let ignore_error = document.getElementById( 'ignored_error_output' );
 
 
@@ -499,8 +499,8 @@ let update_exclude_anywhere_list = function ( new_value ) {
     try {
       let maybe_exclusion_list = new_value;
       if ( typeof new_value === `string` ) {
-        maybe_exclusion_list = JSON.parse( new_value );
-        // maybe_exclusion_list = new_value.split('\n');
+        // maybe_exclusion_list = JSON.parse( new_value );
+        maybe_exclusion_list = new_value.split('\n');
       }
       if ( !Array.isArray( maybe_exclusion_list )) {
         // Does not yet test that every item is a string
@@ -532,8 +532,8 @@ exclusions_uploader.addEventListener( 'change', function () {
       try {
         // Get the data
         let custom_exclusion_json = JSON.parse( reader.result );
-        exclude_anywhere_in_var_name_node.value = JSON.stringify( custom_exclusion_json, null, 2 );
-        // exclude_anywhere_in_var_name_node.value = custom_exclusion_json.join('\n');
+        // exclude_anywhere_in_var_name_node.value = JSON.stringify( custom_exclusion_json, null, 2 );
+        exclude_anywhere_in_var_name_node.value = custom_exclusion_json.join('\n');
         update_exclude_anywhere_list( custom_exclusion_json );
         // Build the new story
         update_output();
@@ -549,8 +549,8 @@ exclusions_uploader.addEventListener( 'change', function () {
 
 let reset_ignore_anywhere = function () {
   // Ignore text we should ignore wherever it appears, even in a fully formed variable name
-  exclude_anywhere_in_var_name_node.value = JSON.stringify( ignore_anywhere_default_alphabetical, null, 2 );
-  // exclude_anywhere_in_var_name_node.value = ignore_anywhere_default_alphabetical.join('\n');
+  // exclude_anywhere_in_var_name_node.value = JSON.stringify( ignore_anywhere_default_alphabetical, null, 2 );
+  exclude_anywhere_in_var_name_node.value = ignore_anywhere_default_alphabetical.join('\n');
   update_exclude_anywhere_list( ignore_anywhere_default_alphabetical );
   update_output();
 };
@@ -615,7 +615,8 @@ vars_uploader.addEventListener( 'change', function () {
       try {
         // Show the textarea value in the DOM
         let custom_exclusion_json = JSON.parse( reader.result );
-        tableInput.value = JSON.stringify( custom_exclusion_json, null, 2 );
+        // tableInput.value = JSON.stringify( custom_exclusion_json, null, 2 );
+        tableInput.value = custom_exclusion_json.split('\n');
         // Build the new story
         update_output();
         update_var_data_error( '' );
