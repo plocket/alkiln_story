@@ -170,6 +170,7 @@ hr {
   border-radius: 2px;
   padding: 0.5em;
   margin-bottom: 1em;
+  overflow-x: auto;
 }
 
 #toggle_exclude {
