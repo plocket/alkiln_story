@@ -394,7 +394,7 @@ let update_output = function () {
   let vars = null;
   try {
     data = JSON.parse( tableInput.value );
-    vars = data.variables;
+    vars = data.variables || data;
     update_var_data_error('');
 
     let filename = get_YAML_file_name({ data });
