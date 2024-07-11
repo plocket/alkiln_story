@@ -413,7 +413,8 @@ let update_output = function () {
     }
   }
   
-  let output = get_test_start({ data });
+  // global
+  output = get_test_start({ data });
   // Add other rows if they exist
   for ( let row of story ) {
     output += `\n    ${ row }`;
